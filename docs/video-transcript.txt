@@ -1,0 +1,91 @@
+Project OpenFridge
+
+[Cover slide]
+
+[Opening slide]
+
+Hello, today I'm going to demonstrate how an emerging model for cloud computing technology, called serverless or event-driven programming, can help an appliance manufacturer improve customer service for their smart devices that are installed in a consumer's home.
+
+
+[Overview slide with highlights animations]
+
+In this demo, a network connected refrigerator periodically sends details about the state of its parts, in case any of them are in need of replacement. For example, the water dispenser in the door may require a new filter after six months of use.
+
+The refrigerator sends a message to the Watson IoT service on Bluemix, which in turn triggers a piece of business logic, called an Action, to execute on the OpenWhisk runtime.
+
+One action analyzes the message, to see whether the filter life reading is within an acceptable range. If it is nearing its end of life, it will record the need for service event in a Cloudant database.
+
+Another action, triggered by that service report, will look up the customer and appliance registration information to determine whether it is in warranty. If it is in warranty, the action will automatically order and ship a replacement part without any other input needed by the customer. Otherwise, it will create a pending order ready for payment and checkout.
+
+Finally, there's an action that is used to alert the customer via email (or push notification) about the the state of their appliance. This action is either triggered by changes to the order or invoked by a nightly batch job when they are within a few days of their warranty expiration.
+
+
+[Benefits slide with fade ins]
+
+So now that we know how the demo works, let's talk a bit about why this type of workload is a natural fit for serverless programming, and why this approach is more appropriate than traditional cloud computing models.
+
+One of the best reasons to use serverless computing is that it can reduce the scope of  custom code down to the specific function needed. You no longer worry about configuring a runtime so this accelerates your time to value.
+
+And because logic can be packaged as individual functions and bound to external events or services, you can assemble and orchestrate them independently. This means less custom code which often means fewer bugs.
+
+Another important aspect of serverless computing is the fact that your application is not deployed as an always running daemon which would spend significant portion of its time idle while you continue to pay for the resources reserved to host it.
+
+Instead, you pay only for the time that your code is actually executing business logic. Instances are spun up instantly in response to demand, and disappear when they are done.
+
+And this leads into a fourth key benefit, handsfree scalability. With event-driven programming, you do not need to address capacity planning. The platform on which your code runs automatically matches compute capacity to handle requests.
+
+
+[Demo]
+
+[Trigger/Action slide]
+OK, so let's take a look at the use case in action. Here's the high level view of the triggers and actions that comprise the business logic.
+
+*Paho view*
+I'm using Eclipse Paho on my desktop to simulate 3 separate refrigerators. When I publish messages from them, I'll see that they are received by OpenWhisk, which in turn executes my business logic.
+
+In this case, I have a refrigerator that sends a message with its serial number, and a reading from a filter with a part number indicating that its remaining usable life is under 15%.
+
+*OpenWhisk console*
+When my application receives that message, it will analyze the reading, look up the customer warranty status, and automatically order the new part for my refrigerator.
+
+*Email view*
+It will then send an email to me notifying me that the part is on its way.
+
+*Paho view*
+If I send a message from a different refrigerator which is not in warranty, I'm still alerted to the problem but I have to take action to purchase the part.
+
+*Email view*
+In this case, I'm alerted to the pending order that I must complete. The system can also be configured to be triggered by a schedule, such as a nightly batch job.
+
+*OpenWhisk editor*
+Let's take a closer look at the code behind the actions.
+
+Here is the action to analyze the incoming service events. It checks for a reading that is below normal, then inserts a service record in the Cloudant database.
+
+When that service record is created, it triggers the order creation event. This function assesses whether the device is in warranty and places the order in the appropriate state.
+
+The inserted order record in turn triggers the customer alert action.
+
+In the alternate flow which is triggered nightly by warranty expiration checks, the system sends a note to the customer that they should consider renewing their warranty.
+
+
+[Closing]
+
+I hope that gives you a feel for how serverless, event-driven programming with the Watson IoT platform and OpenWhisk can help appliance vendors streamline customer service. Thanks for watching!
+
+
+
+
+[Implementation]
+
+Now, I'll take you through the configuration quickly, but you can see the exact setup steps in GitHub.
+
+First, let's look at Watson IoT. In Bluemix I've provisioned an instance of the service, which gives me a link to my service instance dashboard. There are two important areas of the dashboard, the Devices and the Access area.
+
+In the Devices view, I've set up a Device type of "refrigerator-simulator" and created three instances of them. In the Access view, I've created an API Key for the application that will consume messages from the refrigerators.
+
+In Eclipse Paho, I've configured 3 views to represent those refrigerators and publish messages on the MQTT queue on Watson IoT. And I've configured a view to represent the consuming application. When I post a message on the queue, the consuming application will receive them.
+
+In order to have something listen for the messages on Bluemix and in turn use them to invoke the actions on OpenWhisk, I'll need to push a Cloud Foundry application. This app is the Feed Provider. I will bind a Feed Action to it, and this will let me associate a Trigger for a given hostname and topic. Here's a quick look at the entry point for this app.
+
+Ok, once we push that, we can attach the Feed Action, the Trigger, and the Rule that maps it to our custom action.

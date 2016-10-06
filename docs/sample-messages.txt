@@ -1,0 +1,25 @@
+// Expires June 30, 2016:   1467259200
+// Expires July 30, 2016:   1469851200
+// Expires August 30, 2016: 1472529600
+
+// Sent on July 6, 2016: 1467817852
+{
+    "appliance_serial": "aaaabbbbcccc",
+    "part_number": "ddddeeeeffff",
+    "reading": "15",
+    "timestamp": 1467817852
+}
+
+{
+    "appliance_serial": "llllmmmmnnnn",
+    "part_number": "ddddeeeeffff",
+    "reading": "15",
+    "timestamp": 1467817852
+}
+
+{
+    "appliance_serial": "xxxxyyyyzzzz",
+    "part_number": "ddddeeeeffff",
+    "reading": "15",
+    "timestamp": 1467817852
+}

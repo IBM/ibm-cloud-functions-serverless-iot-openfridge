@@ -1,0 +1,10 @@
+applications:
+- name: openfridge
+  host: openfridge
+  path: .
+  domain: mybluemix.net
+  instances: 1
+  memory: 512M
+  buildpack: nodejs_buildpack
+  services:
+  - cloudant-mqtt

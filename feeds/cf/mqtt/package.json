@@ -1,0 +1,29 @@
+{
+  "name": "mqtt_trigger",
+  "version": "1.0.0",
+  "description": "Service to call OpenWhisk triggers from MQTT messages",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "ava"
+  },
+  "author": "James Thomas <james@jamesthom.as>",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.3.5",
+    "body-parser": "^1.15.1",
+    "cfenv": "^1.0.3",
+    "cloudant": "^1.4.1",
+    "express": "^4.13.4",
+    "mqtt": "^1.10.0",
+    "openwhisk": "^2.0.0",
+    "proxyquire": "^1.7.9"
+  },
+  "devDependencies": {
+    "ava": "^0.14.0"
+  },
+  "engines": {
+      "npm": "3",
+      "node": "4.4.2"
+  }
+}
