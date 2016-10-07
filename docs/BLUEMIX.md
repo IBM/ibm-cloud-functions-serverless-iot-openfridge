@@ -81,6 +81,20 @@ Log into the Bluemix console and create a SendGrid instance. If you don't want t
 ```
 * Look back at the History tab for the application, and you should see the message has been received. Now that we've tested connectivity, let's use a Cloud Foundry application to be the application we use to listen for events on that MQTT topic.
 
+### Add a record for this device in Cloudant
+The `CLOUDANT_APPLIANCE_DATABASE` database is a listing of documents that map a customer to a particular appliance, so create one or more documents that map the `appliance_serial` to a particular owner:
+
+```
+{
+  "_id": "aaaabbbbcccc",
+  "serial": "aaaabbbbcccc",
+  "warranty_expiration": 1467259200,
+  "owner_name": "Daniel Krook",
+  "owner_email": "krook@example.com",
+  "owner_phone": "18885551212"
+}
+```
+
 ## Create MQTT feed provider
 Since there isn't a shared MQTT event producer available as a package on OpenWhisk today, we need to set up a proxy application that will subscribe to an MQTT topic, and invoke our OpenWhisk action on new messages.
 
