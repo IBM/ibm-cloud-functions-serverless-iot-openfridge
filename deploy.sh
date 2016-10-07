@@ -13,23 +13,28 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# Color vars to be used in shell script output
+RED='\033[0;31m'
+YELLOW='\033[0;33m'
+GREEN='\033[0;32m'
+NC='\033[0m'
  
-# load configuration variables
+# Load configuration variables
 source local.env
 
-# capture the namespace where actions will be created
-# as we need to pass it to our change listener
+# Capture the namespace where actions will be created
 WSK=`locate /wsk`
 CURRENT_NAMESPACE=`$WSK property get --namespace | sed -n -e 's/^whisk namespace//p' | tr -d '\t '`
-
-
 echo "Current namespace is $CURRENT_NAMESPACE."
 
 function usage() {
-  echo "Usage: $0 [--install,--uninstall,--update,--env]"
+  echo -e "${YELLOW}Usage: $0 [--install,--uninstall,--env]${NC}"
 }
 
 function install() {    
+  echo -e "${YELLOW}Installing OpenWhisk actions, triggers, and rules for OpenFridge..."
+  
   echo "Binding the Cloudant package"
   $WSK package bind /whisk.system/cloudant cloudant-mqtt \
     -p username "$CLOUDANT_USERNAME" \
@@ -83,9 +88,13 @@ function install() {
   $WSK rule create --enable order-rule order-trigger alert-customer-event
   $WSK rule create --enable check-warranty-rule check-warranty-trigger check-warranty-renewal
   $WSK rule create --enable openfridge-feed-rule openfridge-feed-trigger analyze-service-event
+
+  echo -e "${GREEN}Install Complete${NC}"
 }
 
 function uninstall() {  
+  echo -e "${RED}Uninstalling..."
+
   echo "Removing rules..."
   $WSK rule disable openfridge-feed-rule
   $WSK rule disable check-warranty-rule
@@ -113,43 +122,12 @@ function uninstall() {
   echo "Removing packages..."
   $WSK package delete mqtt
   $WSK package delete cloudant-mqtt
-}
 
-function update() {
-  echo "Updating actions..."
-  $WSK action update analyze-service-event analyze-service-event.js \
-    -p CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
-    -p CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD"
-  $WSK action update create-order-event create-order-event.js \
-    -p CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
-    -p CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD"
-  $WSK action update check-warranty-renewal check-warranty-renewal.js \
-    -p CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
-    -p CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD"
-  $WSK action update alert-customer-event alert-customer-event.js \
-    -p CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
-    -p CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD" \
-    -p SENDGRID_API_KEY "$SENDGRID_API_KEY" \
-    -p SENDGRID_FROM_ADDRESS "$SENDGRID_FROM_ADDRESS"
-}
-
-function disable() {
-  echo "Disabling rules..."
-  $WSK rule disable openfridge-feed-rule
-  $WSK rule disable check-warranty-rule
-  $WSK rule disable order-rule
-  $WSK rule disable service-rule
-}
-
-function enable() {
-  echo "Enabling rules..."
-  $WSK rule create --enable service-rule service-trigger create-order-event
-  $WSK rule create --enable order-rule order-trigger alert-customer-event
-  $WSK rule create --enable check-warranty-rule check-warranty-trigger check-warranty-renewal
-  $WSK rule create --enable openfridge-feed-rule openfridge-feed-trigger analyze-service-event
+  echo -e "${GREEN}Uninstall Complete${NC}"
 }
 
 function showenv() {
+  echo -e "${YELLOW}"
   echo ORG="$ORG"
   echo SPACE="$SPACE"
   echo CLOUDANT_USERNAME="$CLOUDANT_USERNAME"
@@ -166,6 +144,7 @@ function showenv() {
   echo SENDGRID_API_KEY="$SENDGRID_API_KEY"
   echo SENDGRID_FROM_ADDRESS="$SENDGRID_FROM_ADDRESS"
   echo ALARM_CRON="$ALARM_CRON"
+  echo -e "${NC}"
 }
 
 case "$1" in
@@ -175,17 +154,8 @@ install
 "--uninstall" )
 uninstall
 ;;
-"--update" )
-update
-;;
 "--env" )
 showenv
-;;
-"--disable" )
-disable
-;;
-"--enable" )
-enable
 ;;
 * )
 usage
