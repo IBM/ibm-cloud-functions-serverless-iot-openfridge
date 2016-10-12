@@ -24,7 +24,7 @@ NC='\033[0m'
 source local.env
 
 # Capture the namespace where actions will be created
-WSK=`locate /wsk`
+WSK='wsk'
 CURRENT_NAMESPACE=`$WSK property get --namespace | sed -n -e 's/^whisk namespace//p' | tr -d '\t '`
 echo "Current namespace is $CURRENT_NAMESPACE."
 
