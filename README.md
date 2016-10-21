@@ -1,6 +1,8 @@
 # Project OpenFridge
 This project provides a demo of serverless technology powered by OpenWhisk and used in the context of IoT. It highlights an edge-to-cloud scenario that integrates the Watson IoT platform, OpenWhisk, and Bluemix services to show a event-driven use case. It also demonstrates the programming models that enable this, and discusses the benefits relative to traditional cloud development approaches.
 
+If you're just interested in the **[OpenWhisk package for Watson IoT MQTT](https://github.com/krook/openwhisk-package-mqtt-watson)** integration, you an find that in its own package repository.
+
 [![Project OpenFridge](https://img.youtube.com/vi/0Sl4rWZYo8w/0.jpg)](https://www.youtube.com/watch?v=0Sl4rWZYo8w)
 
 ## Improving customer service with IoT and event-driven computing
