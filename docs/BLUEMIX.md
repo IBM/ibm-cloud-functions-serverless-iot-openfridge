@@ -94,6 +94,7 @@ The `CLOUDANT_APPLIANCE_DATABASE` database is a listing of documents that map a 
   "owner_phone": "18885551212"
 }
 ```
+**Notice**: the email address specified here will be eventually used to send email notifications by the OpenWhisk actions - make sure it is valid.
 
 ## Create MQTT feed provider
 Since there isn't a shared MQTT event producer available as a package on OpenWhisk today, we need to set up a proxy application that will subscribe to an MQTT topic, and invoke our OpenWhisk action on new messages.
