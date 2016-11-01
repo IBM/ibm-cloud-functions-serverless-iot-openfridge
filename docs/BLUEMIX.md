@@ -48,12 +48,12 @@ Log into the Bluemix console and create a SendGrid instance. If you don't want t
 * On the left side menu, choose "Devices" then click the "Add Device" button on the right. You'll need to create a "Device Type" first, so create one with a Name of "refrigerator-simulator" and give it a Description of "A way to simulate a refrigerator."
 
 ### Create a device of that type
-* Continue in the same dialog window or another one to continue adding a device instance. Give it a Device ID of "1" Serial number of "aaaabbbbcccc", a Manufacturer of "Electrolux", and a Model of "1200n" and autogenerate a Token.
+* Continue in the same dialog window or another one to continue adding a device instance. Give it a Device ID of "1" Serial number of "aaaabbbbcccc", a Manufacturer of "Electrolux", and a Model of "1200n" and autogenerate (or enter) a Token. You will need to specify this token when connecting the device to the IoT Platform (in our case, in the Paho connection options, as outlined below).
 * Optionally, create two more devices with unique IDs and Serials, such as "2", "llllmmmmnnnn" and "3", "xxxxyyyyzzzz".
 
 ### Create application access token
 * Your devices now have all the access information they need, but you'll need to set up a separate API key for the consuming application, which will be the Node.js application on Bluemix.
-* On the dashboard, choose "Access" and pick the "API keys" tab. Click the "Generate API Key" button, give it a comment, save the info, and click "Finish".
+* On the dashboard, choose "Apps" and pick the "API keys" tab. Click the "Generate API Key" button, give it a comment, save the info, and click "Finish".
 
 ## Set up IoT event producer to simulate the device
 
@@ -63,7 +63,7 @@ Log into the Bluemix console and create a SendGrid instance. If you don't want t
 * Set the "Server URI" to `tcp://$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com:1883` (replacing `$WATSON_TEAM_ID` with your six digit ID).
 * Set the "Client ID" to `d:$WATSON_TEAM_ID:refrigerator-simulator:$DEVICE_1_ID` (replacing `$DEVICE_1_ID` with the value you set in the previous section. This value doesn't have to be added to `local.env`).
 * On the Options tab, check the "Enable login" box, set the "Username" to "use-token-auth" and enter the token for the specific device in the "Password" field.
-* Optionally, create an additional two device connections following the previous two steps.
+* Optionally, create an additional two device connections following the previous steps.
 * Finally, create a message consuming application connection using the same steps as for the devices, except for the "Client ID" which will be `a:$WATSON_TEAM_ID:openfridge`, and your "Username" and "Password" which will be your API Key information from the previous section.
 
 ### Connect to IoT Foundations and post a message
