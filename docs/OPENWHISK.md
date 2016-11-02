@@ -2,7 +2,7 @@
 If you haven't already, download, install, and test the [`wsk` CLI tool](https://new-console.ng.bluemix.net/openwhisk/cli).
 
 From this point forward, you can instead just run the following commands to set up the OpenWhisk resources with a deployment script:
-* Run `source local.env`.
+* Make sure `local.env` is complete. Run `source local.env`.
 * Run the `deploy.sh` script. For example, `./deploy.sh --install`
 
 Otherwise, read on if you want to understand how all the OpenWhisk actions, triggers, and rules come together or if you want to set them up yourself.
@@ -43,15 +43,15 @@ Inside of the core OpenWhisk logic, we have the trigger we created above for the
 ## Create custom triggers and rules
 
 ### Create the trigger for the feed action
-* `wsk trigger create openfridge-feed-trigger --feed /$ORG\_$SPACE/mqtt/mqtt-feed-action -p topic 'iot-2/type/+/id/+/evt/+/fmt/json' -p url 'ssl://ymv7md.messaging.internetofthings.ibmcloud.com:8883'`
+* `wsk trigger create openfridge-feed-trigger --feed /$ORG\_$SPACE/mqtt/mqtt-feed-action -p topic 'iot-2/type/+/id/+/evt/+/fmt/json' -p url 'tcp://$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com:1883'`
 
 ### Create the triggers for the Cloudant feeds
 * `wsk property set --namespace $ORG\_$SPACE`
-* `wsk package bind /whisk.system/cloudant cloudant-mqtt -p username $CLOUDANT_USER -p password $CLOUDANT_PASS -p host $CLOUDANT_HOST`
+* `wsk package bind /whisk.system/cloudant $CLOUDANT_INSTANCE -p username $CLOUDANT_USER -p password $CLOUDANT_PASS -p host $CLOUDANT_HOST`
 * `wsk package list`
 * `wsk package get /$ORG\_$SPACE/openfridge`
-* `wsk trigger create service-trigger --feed /$ORG\_$SPACE/cloudant-mqtt/changes --param dbname 'service' --param includeDocs true`
-* `wsk trigger create order-trigger --feed /$ORG\_$SPACE/cloudant-mqtt/changes --param dbname 'order' --param includeDocs true`
+* `wsk trigger create service-trigger --feed /$ORG\_$SPACE/$CLOUDANT_INSTANCE/changes --param dbname 'service' --param includeDocs true`
+* `wsk trigger create order-trigger --feed /$ORG\_$SPACE/$CLOUDANT_INSTANCE/changes --param dbname 'order' --param includeDocs true`
 
 ### Create the trigger for the periodic warranty check
 *  `wsk trigger create check-warranty-trigger --feed /whisk.system/alarms/alarm --param cron '* 0 * * *' --param maxTriggers 10`
@@ -67,3 +67,9 @@ There are a few helper scripts in the `devops` directory.
 
 * `devops/refresh-actions.sh $CLOUDANT_USER $CLOUDANT_PASS $SENDGRID_API_KEY` creates and destroys the actions. It should be run from within the `js/actions` folder.
 * `devops/refresh-rules.sh $ORG $SPACE` creates and destroys the triggers and rules.
+
+# End-to-end test
+In order to test the entire solution end-to-end, send a sample MQTT event using the Paho client (as outlined in [BLUEMIX.MD](BLUEMIX.MD)), and observe an email sent to the address registered with the device. 
+
+## Troubleshooting
+For troubleshooting, use `cf logs openfridge` to see logs of the feed provider app, and OpenWhisk dashboard for logs and status of the various triggers and actions.

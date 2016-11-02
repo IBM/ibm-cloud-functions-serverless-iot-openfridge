@@ -36,7 +36,7 @@ function install() {
   echo -e "${YELLOW}Installing OpenWhisk actions, triggers, and rules for OpenFridge..."
   
   echo "Binding the Cloudant package"
-  $WSK package bind /whisk.system/cloudant cloudant-mqtt \
+  $WSK package bind /whisk.system/cloudant "$CLOUDANT_INSTANCE" \
     -p username "$CLOUDANT_USERNAME" \
     -p password "$CLOUDANT_PASSWORD" \
     -p host "$CLOUDANT_USERNAME.cloudant.com"
@@ -49,16 +49,16 @@ function install() {
   $WSK trigger create openfridge-feed-trigger \
     -f mqtt/mqtt-feed-action \
     -p topic "$WATSON_TOPIC" \
-    -p url "ssl://$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com:8883" \
+    -p url "tcp://$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com:1883" \
     -p username "$WATSON_USERNAME" \
     -p password "$WATSON_PASSWORD" \
     -p client "$WATSON_CLIENT"
   $WSK trigger create service-trigger \
-    -f cloudant-mqtt/changes \
+    -f "$CLOUDANT_INSTANCE"/changes \
     -p dbname "$CLOUDANT_SERVICE_DATABASE" \
     -p includeDocs true
   $WSK trigger create order-trigger \
-    -f cloudant-mqtt/changes \
+    -f "$CLOUDANT_INSTANCE"/changes \
     -p dbname "$CLOUDANT_ORDER_DATABASE" \
     -p includeDocs true
   $WSK trigger create check-warranty-trigger \
@@ -121,7 +121,7 @@ function uninstall() {
   
   echo "Removing packages..."
   $WSK package delete mqtt
-  $WSK package delete cloudant-mqtt
+  $WSK package delete "$CLOUDANT_INSTANCE"
 
   echo -e "${GREEN}Uninstall Complete${NC}"
 }
