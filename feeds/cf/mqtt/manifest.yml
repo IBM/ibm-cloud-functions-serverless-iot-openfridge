@@ -7,4 +7,4 @@ applications:
   memory: 512M
   buildpack: nodejs_buildpack
   services:
-  - cloudant-mqtt
+   - cloudant-mqtt-watson
