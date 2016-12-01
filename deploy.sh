@@ -49,7 +49,7 @@ function install() {
   $WSK trigger create openfridge-feed-trigger \
     -f mqtt/mqtt-feed-action \
     -p topic "$WATSON_TOPIC" \
-    -p url "tcp://$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com:1883" \
+    -p url "ssl://$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com:8883" \
     -p username "$WATSON_USERNAME" \
     -p password "$WATSON_PASSWORD" \
     -p client "$WATSON_CLIENT"
@@ -84,10 +84,10 @@ function install() {
     -p SENDGRID_FROM_ADDRESS "$SENDGRID_FROM_ADDRESS"
 
   echo "Enabling rules"
-  $WSK rule create --enable service-rule service-trigger create-order-event
-  $WSK rule create --enable order-rule order-trigger alert-customer-event
-  $WSK rule create --enable check-warranty-rule check-warranty-trigger check-warranty-renewal
-  $WSK rule create --enable openfridge-feed-rule openfridge-feed-trigger analyze-service-event
+  $WSK rule create service-rule service-trigger create-order-event
+  $WSK rule create order-rule order-trigger alert-customer-event
+  $WSK rule create check-warranty-rule check-warranty-trigger check-warranty-renewal
+  $WSK rule create openfridge-feed-rule openfridge-feed-trigger analyze-service-event
 
   echo -e "${GREEN}Install Complete${NC}"
 }
