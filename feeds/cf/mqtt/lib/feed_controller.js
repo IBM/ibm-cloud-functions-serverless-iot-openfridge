@@ -21,7 +21,7 @@ class FeedController {
         return this.trigger_store.subscribers().then(subscribers => {
             subscribers.forEach(s => mgr.subscribe.apply(mgr, s.topic.split('#')));
         }).catch(err => {
-            console.error('Error initialising subscribers from CouchDB store.' , err.reason);
+            console.error('Error initialising subscribers from CouchDB store.' , err);
             return Promise.reject('Unable to initialise due to store failure.');
         });
     }
@@ -38,7 +38,7 @@ class FeedController {
         const params = {type: 'message', body: message};
         this.trigger_store.triggers(url, topic).then(triggers => {
             triggers.forEach(trigger => this.fire_trigger(trigger, params));
-        }).catch(err => console.error('Unable to forward message to triggers.', err.reason))
+        }).catch(err => console.error('Unable to forward message to triggers.', err))
     }
 
     fire_trigger (trigger, params) {
@@ -46,8 +46,8 @@ class FeedController {
         const namespace = trigger.trigger.split('/')[0];
         const name = trigger.trigger.split('/')[1];
         var ow = openwhisk({api: this.ow_endpoint, api_key: `${trigger.openWhiskUsername}:${trigger.openWhiskPassword}`, namespace: namespace});
-        ow.triggers.invoke({triggerName: name, params: params})
-          .catch(err => console.error(`Failed to fire trigger ${trigger.trigger}`, err.reason))
+        ow.triggers.invoke({triggerName: name, params: params, namespace: namespace})
+          .catch(err => console.error(`Failed to fire trigger ${trigger.trigger}`, err, ow))
     }
 
     // trigger: trigger (namespace/name), url, topic, openWhiskUsername, openWhiskPassword, watsonUsername, watsonPassword, watsonClientId

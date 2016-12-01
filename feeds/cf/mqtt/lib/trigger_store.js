@@ -38,4 +38,4 @@ class TriggerStore {
     }
 }
 
-module.exports = TriggerStore
+module.exports = TriggerStore;
