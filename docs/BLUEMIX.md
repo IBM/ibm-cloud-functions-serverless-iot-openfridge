@@ -10,9 +10,7 @@ Start by copying `template.local.env` to a new `local.env` file. You can fill in
 Log into the [Bluemix console](https://console.ng.bluemix.net/) and create a [Cloudant instance](https://console.ng.bluemix.net/catalog/services/cloudant-nosql-db/?taxonomyNavigation=services). You can reuse an existing instance if you already have one. 
 **Important**: the name of the Cloudant service instance must start with the `cloudant` prefix (case insensitive), for example `cloudant-openfridge`. 
 
-Update `CLOUDANT_INSTANCE` in `local.env` to reflect the name of the Cloudant service instance and ensure it matches what's set in `feeds/cf/mqtt/manifest.yml`.
-
-Then set the `CLOUDANT_USERNAME` and `CLOUDANT_PASSWORD` values in `local.env` based on the credentials for the service.
+Update `CLOUDANT_INSTANCE` in `local.env` to reflect the name of the Cloudant service instance and ensure it matches what's set in `feeds/cf/mqtt/manifest.yml`. Then set the `CLOUDANT_USERNAME` and `CLOUDANT_PASSWORD` values in `local.env` based on the credentials for the service.
 
 Launch the Cloudant console and create three databases. Set their names in the `CLOUDANT_SERVICE_DATABASE`, `CLOUDANT_ORDER_DATABASE`, and `CLOUDANT_APPLIANCE_DATABASE` variables. For example, `service`, `order`, and `appliance`.
 
@@ -45,18 +43,18 @@ Log into the Bluemix console and create a [SendGrid](https://console.ng.bluemix.
 ## Set up IoT Foundation
 
 ### Provision an instance of the Watson IoT Platform
-* Log into the Bluemix console, provision an instance of the [Watson IoT Platform](https://console.ng.bluemix.net/catalog/services/internet-of-things-platform/?taxonomyNavigation=services), then log into the the service dashboard.
+* Log into the Bluemix console, provision an instance of the [Watson IoT Platform](https://console.ng.bluemix.net/catalog/services/internet-of-things-platform/?taxonomyNavigation=services), then launch the service dashboard.
 
 ### Create device type
 * On the left side menu, choose "Devices" then click the "Add Device" button on the right. You'll need to create a "Device Type" first, so create one with a Name of "refrigerator-simulator", give it a Description of "A way to simulate a refrigerator", and select "Serial Number", "Manufacturer" and "Model" attributes for the new device type (e.g., using "0" as template values).
 
 ### Create a device of that type
-* Continue in the same dialog window or another one to continue adding a device instance. Give it a Device ID of "1" Serial number of "aaaabbbbcccc", a Manufacturer of "Electrolux", and a Model of "1200n" and autogenerate (or enter) a Token. You will need to specify this token when connecting the device to the IoT Platform (in our case, in the Paho connection options, as outlined below).
+* Continue in the same dialog window to add a device instance. Give it a Device ID of "1", Serial number of "aaaabbbbcccc", a Manufacturer of "Electrolux", and a Model of "1200n" and autogenerate (or enter) a Token. You will need to specify this token when connecting the device to the IoT Platform (in our case, in the Paho connection options, as outlined below).
 * Optionally, create two more devices with unique IDs and Serials, such as "2", "llllmmmmnnnn" and "3", "xxxxyyyyzzzz".
 
 ### Create application access token
-* Your devices now have all the access information they need, but you'll need to set up a separate API key for the consuming application, which will be the Node.js application on Bluemix.
-* On the dashboard, choose "Apps" and pick the "API keys" tab. Click the "Generate API Key" button. Write down the generated key and token - you will need to update them in `local.env`, and also in the Paho client setup (as outlined below). Click "Generate".
+* Your devices now have all the access information they need, but you'll need to set up a separate API key for the consuming application, which will be a Node.js application deployed via Cloud Foundry on Bluemix.
+* On the dashboard, choose "Apps" and pick the "API keys" tab. Click the "Generate API Key" button. Save the generated key and token and update them in `local.env`. You also need them for the Paho client setup (as outlined below). Click "Generate".
 
 ## Set up IoT event producer to simulate the device
 
@@ -72,7 +70,7 @@ Log into the Bluemix console and create a [SendGrid](https://console.ng.bluemix.
 ### Connect to IoT Platform and post a message
 * First, let's subscribe the application to receive messages from all devices. Add a "Subscription" to the `iot-2/type/+/id/+/evt/+/fmt/json` topic. Note that this queue format is different from the ones the devices post to because it contains wildcards. Update the topic also in `local.env` file.
 * From the device simulators, then publish a test message onto the Device Type topic:
-* Enter the "Topic" as `iot-2/evt/refrigerator-simulator/fmt/json`
+* Enter the "Topic" as `iot-2/evt/refrigerator-simulator/fmt/json` in the "Publication" area.
 * Enter the sample JSON, making sure the Serial matches your Device.
 ```
 {
