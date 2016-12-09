@@ -102,7 +102,7 @@ Since there isn't a shared MQTT event producer available as a package on OpenWhi
 
 ### Start up an instance of the MQTT feed consumer as a Cloud Foundry app
 * Download the [`cf` CLI](https://console.ng.bluemix.net/docs/cli/index.html#cli) and [connect to Bluemix](https://console.ng.bluemix.net/docs/cfapps/ee.html#ee_cf).
-* Clone this repository, change to the `feeds/cf/mqtt` directory, update the `manifest.yml` file (hostname and the name of the Cloudant service) and then use `cf push` to deploy it to Bluemix. Also, set this hostname in `local.env` as the `$CF_PROXY_HOST` value.
+* Clone this repository, change to the `feeds/cf/mqtt` directory, update the `manifest.yml` file (provide a unique host and the name of the Cloudant service) and then use `cf push` to deploy it to Bluemix. Also, set this hostname in `local.env` as the `$CF_PROXY_HOST` value. For example, "openfridge-of".
 * You can verify the app is deployed and ready by going to `http://$CF_PROXY_HOST.mybluemix.net/` with your web browser.
 
 ## Next steps
