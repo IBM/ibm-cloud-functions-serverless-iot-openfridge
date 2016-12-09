@@ -37,7 +37,7 @@ Create one more `topic_listeners` database in Cloudant, which will manage the st
 ```
 
 ### Set up SendGrid
-Log into the Bluemix console and create a SendGrid instance. If you don't want to pay for the minimum plan, you can go to SendGrid.com directly to request a free trial. Follow the developer documentation to configure an API key. Update `local.env` accordingly.
+Log into the Bluemix console and create a SendGrid instance. If you don't want to pay for the minimum plan, you can go to SendGrid.com directly to request a free trial. Follow the developer documentation to configure an API key. Update `local.env` accordingly. There is additional information on [configuring SendGrid with Bluemix here](https://www.ibm.com/blogs/bluemix/2016/12/using-sendgrid-easy-sending-email/).
 
 ## Set up IoT Foundation
 
