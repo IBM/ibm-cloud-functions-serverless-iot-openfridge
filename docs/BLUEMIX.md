@@ -8,13 +8,13 @@ Start by copying `template.local.env` to a new `local.env` file. You can fill in
 
 ### Set up Cloudant
 Log into the [Bluemix console](https://console.ng.bluemix.net/) and create a [Cloudant instance](https://console.ng.bluemix.net/catalog/services/cloudant-nosql-db/?taxonomyNavigation=services). You can reuse an existing instance if you already have one. 
-**Important**: the name of the Cloudant service instance must start with the `cloudant` prefix (case insensitive). 
+**Important**: the name of the Cloudant service instance must start with the `cloudant` prefix (case insensitive), for example `cloudant-openfridge`. 
 
 Update `CLOUDANT_INSTANCE` in `local.env` to reflect the name of the Cloudant service instance and ensure it matches what's set in `feeds/cf/mqtt/manifest.yml`.
 
-Then set the `CLOUDANT_USERNAME` and `CLOUDANT_PASSWORD` values in `local.env` based on the service credentials for the service.
+Then set the `CLOUDANT_USERNAME` and `CLOUDANT_PASSWORD` values in `local.env` based on the credentials for the service.
 
-Log into the Cloudant console and create three databases. Set their names in the `CLOUDANT_SERVICE_DATABASE`, `CLOUDANT_ORDER_DATABASE`, and `CLOUDANT_APPLIANCE_DATABASE` variables.
+Launch the Cloudant console and create three databases. Set their names in the `CLOUDANT_SERVICE_DATABASE`, `CLOUDANT_ORDER_DATABASE`, and `CLOUDANT_APPLIANCE_DATABASE` variables. For example, `service`, `order`, and `appliance`.
 
 Create one more `topic_listeners` database in Cloudant, which will manage the state of the MQTT subscriptions. Then add this Design Document to the database:
 
