@@ -1,5 +1,5 @@
 # Setting up the environment
-This document describes how to use Bluemix to set up the Cloudant database, SendGrid service, configure and test the Watson IoT service and devices, and then deploy a Cloud Foundry application that proxies MQTT events to the OpenWhisk actions.
+This document describes how to use Bluemix to set up the Cloudant database, SendGrid email service, configure and test the Watson IoT service and devices, and then deploy a Cloud Foundry application that proxies MQTT events to the OpenWhisk actions.
 
 After completing the steps here, proceed to [set up the OpenWhisk actions, triggers, and rules](OPENWHISK.md).
 
