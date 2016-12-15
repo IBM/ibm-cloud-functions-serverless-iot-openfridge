@@ -7,8 +7,7 @@ After completing the steps here, proceed to [set up the OpenWhisk actions, trigg
 Start by copying `template.local.env` to a new `local.env` file. You can fill in additional details as you go through the steps below. The `.gitignore` file will prevent that private file from being pushed to source control if you push modifications to your own fork.
 
 ### Set up Cloudant
-Log into the [Bluemix console](https://console.ng.bluemix.net/) and create a [Cloudant instance](https://console.ng.bluemix.net/catalog/services/cloudant-nosql-db/?taxonomyNavigation=services). You can reuse an existing instance if you already have one.
-**Important**: the name of the Cloudant service instance must start with the `cloudant` prefix (case insensitive), for example `cloudant-openfridge`.
+Log into the [Bluemix console](https://console.ng.bluemix.net/) and create a [Cloudant instance](https://console.ng.bluemix.net/catalog/services/cloudant-nosql-db/?taxonomyNavigation=services) named `cloudant-openfridge`.
 
 Update `CLOUDANT_INSTANCE` in `local.env` to reflect the name of the Cloudant service instance and ensure it matches what's set in `feeds/cf/mqtt/manifest.yml`. Then set the `CLOUDANT_USERNAME` and `CLOUDANT_PASSWORD` values in `local.env` based on the credentials for the service.
 
@@ -25,13 +24,13 @@ Create one more `topic_listeners` database in Cloudant, which will manage the st
       "map": "function (doc) {\n  emit(doc.url + '#' + doc.topic, 1);\n}"
     },
     "host_topic_triggers": {
-      "map": "function (doc) {\n  emit(doc.url + '#' + doc.topic, {trigger: doc._id, openWhiskUsername: doc.openWhiskUsername, openWhiskPassword: doc.openWhiskPassword});\n}"
+      "map": "function (doc) {\n  emit(doc.url + '#' + doc.topic, {trigger: doc._id, openWhiskUsername: doc.openWhiskUsername, openWhiskPassword: doc.openWhiskPassword, username: doc.watsonUsername, password: doc.watsonPassword, clientId: doc.watsonClientId});\n}"
     },
     "all": {
       "map": "function (doc) {\n  emit(doc._id, doc.url + '#' + doc.topic);\n}"
     },
     "host_triggers": {
-      "map": "function (doc) {\n  emit(doc.url, {trigger: doc._id, openWhiskUsername: doc.openWhiskUsername, openWhiskPassword: doc.openWhiskPassword});\n}"
+      "map": "function (doc) {\n  emit(doc.url, {trigger: doc._id, openWhiskUsername: doc.openWhiskUsername, openWhiskPassword: doc.openWhiskPassword, username: doc.watsonUsername, password: doc.watsonPassword, clientId: doc.watsonClientId});\n}"
     }
   }
 }

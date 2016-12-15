@@ -33,6 +33,7 @@ class FeedController {
         mgr.on('connected', url => this.on_conn_status('connected', url));
         mgr.on('disconnected', url => this.on_conn_status('disconnected', url));
 
+        console.log(`Subscribing on start in initialise()`);
         return this.trigger_store.subscribers().then(subscribers => {
             subscribers.forEach(s => mgr.subscribe.apply(mgr, s.topic.split('#')));
         }).catch(err => {
@@ -40,7 +41,7 @@ class FeedController {
             return Promise.reject('Unable to initialise due to store failure.');
         });
     }
-    
+
     on_conn_status (status, url) {
         const params = {type: 'status', body: status};
         this.trigger_store.triggers(url).then(triggers => {
@@ -58,7 +59,7 @@ class FeedController {
 
     fire_trigger (trigger, params) {
         console.log(`Firing trigger: ${trigger.trigger}`, params);
-        const namespace = trigger.trigger.split('/')[0];
+        const namespace = '_';
         const name = trigger.trigger.split('/')[1];
         var ow = openwhisk({api: this.ow_endpoint, api_key: `${trigger.openWhiskUsername}:${trigger.openWhiskPassword}`, namespace: namespace});
         ow.triggers.invoke({triggerName: name, params: params, namespace: namespace})
@@ -68,7 +69,7 @@ class FeedController {
     // trigger: trigger (namespace/name), url, topic, openWhiskUsername, openWhiskPassword, watsonUsername, watsonPassword, watsonClientId
     add_trigger (trigger) {
         const mgr = this.mqtt_subscription_mgr;
-        return this.trigger_store.add(trigger).then(() => { 
+        return this.trigger_store.add(trigger).then(() => {
             mgr.subscribe(trigger.url, trigger.topic, trigger.watsonUsername, trigger.watsonPassword, trigger.watsonClientId);
             if (mgr.is_connected(trigger.url)) {
                const params = {type: 'status', body: 'connected'};

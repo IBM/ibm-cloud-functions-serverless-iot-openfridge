@@ -1,13 +1,13 @@
 #!/bin/bash
 #
 # Copyright 2016 IBM Corp. All Rights Reserved.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the “License”);
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #  https://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an “AS IS” BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,7 +19,7 @@ RED='\033[0;31m'
 YELLOW='\033[0;33m'
 GREEN='\033[0;32m'
 NC='\033[0m'
- 
+
 # Load configuration variables
 source local.env
 
@@ -32,9 +32,9 @@ function usage() {
   echo -e "${YELLOW}Usage: $0 [--install,--uninstall,--env]${NC}"
 }
 
-function install() {    
+function install() {
   echo -e "${YELLOW}Installing OpenWhisk actions, triggers, and rules for OpenFridge..."
-  
+
   echo "Binding the Cloudant package"
   $WSK package bind /whisk.system/cloudant "$CLOUDANT_INSTANCE" \
     -p username "$CLOUDANT_USERNAME" \
@@ -52,15 +52,13 @@ function install() {
     -p url "ssl://$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com:8883" \
     -p username "$WATSON_USERNAME" \
     -p password "$WATSON_PASSWORD" \
-    -p client "$WATSON_CLIENT"
+    -p client "$WATSON_CLIENT" -v
   $WSK trigger create service-trigger \
     -f "$CLOUDANT_INSTANCE"/changes \
-    -p dbname "$CLOUDANT_SERVICE_DATABASE" \
-    -p includeDocs true
+    -p dbname "$CLOUDANT_SERVICE_DATABASE"
   $WSK trigger create order-trigger \
     -f "$CLOUDANT_INSTANCE"/changes \
-    -p dbname "$CLOUDANT_ORDER_DATABASE" \
-    -p includeDocs true
+    -p dbname "$CLOUDANT_ORDER_DATABASE"
   $WSK trigger create check-warranty-trigger \
     -f /whisk.system/alarms/alarm \
     -p cron "$ALARM_CRON" \
@@ -82,17 +80,21 @@ function install() {
     -p CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD" \
     -p SENDGRID_API_KEY "$SENDGRID_API_KEY" \
     -p SENDGRID_FROM_ADDRESS "$SENDGRID_FROM_ADDRESS"
+  $WSK action create service-sequence \
+    --sequence /$CURRENT_NAMESPACE/$CLOUDANT_INSTANCE/read,create-order-event
+  $WSK action create order-sequence \
+    --sequence /$CURRENT_NAMESPACE/$CLOUDANT_INSTANCE/read,alert-customer-event
 
   echo "Enabling rules"
-  $WSK rule create service-rule service-trigger create-order-event
-  $WSK rule create order-rule order-trigger alert-customer-event
+  $WSK rule create service-rule service-trigger service-sequence
+  $WSK rule create order-rule order-trigger order-sequence
   $WSK rule create check-warranty-rule check-warranty-trigger check-warranty-renewal
   $WSK rule create openfridge-feed-rule openfridge-feed-trigger analyze-service-event
 
   echo -e "${GREEN}Install Complete${NC}"
 }
 
-function uninstall() {  
+function uninstall() {
   echo -e "${RED}Uninstalling..."
 
   echo "Removing rules..."
@@ -104,21 +106,23 @@ function uninstall() {
   $WSK rule delete openfridge-feed-rule
   $WSK rule delete check-warranty-rule
   $WSK rule delete order-rule
-  $WSK rule delete service-rule  
-  
+  $WSK rule delete service-rule
+
   echo "Removing actions..."
   $WSK action delete analyze-service-event
   $WSK action delete create-order-event
   $WSK action delete check-warranty-renewal
   $WSK action delete alert-customer-event
+  $WSK action delete service-sequence
+  $WSK action delete order-sequence
   $WSK action delete mqtt/mqtt-feed-action
-  
+
   echo "Removing triggers..."
   $WSK trigger delete openfridge-feed-trigger
   $WSK trigger delete service-trigger
   $WSK trigger delete order-trigger
   $WSK trigger delete check-warranty-trigger
-  
+
   echo "Removing packages..."
   $WSK package delete mqtt
   $WSK package delete "$CLOUDANT_INSTANCE"

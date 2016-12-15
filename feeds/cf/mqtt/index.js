@@ -28,7 +28,7 @@ let creds = {};
 // Extract Cloudant credentials from environment
 if (process.env.VCAP_SERVICES) {
     const appEnv = require('cfenv').getAppEnv();
-    creds = appEnv.getServiceCreds(/cloudant/i);
+    creds = appEnv.getServiceCreds('cloudant-openfridge');
 } else if (process.env.CLOUDANT_USERNAME && process.env.CLOUDANT_PASSWORD){
     creds.username = process.env.CLOUDANT_USERNAME;
     creds.password = process.env.CLOUDANT_PASSWORD;
@@ -59,7 +59,7 @@ feed_controller.initialise().then(() => {
         res.send('MQTT app up and ready.');
     });
 
-    // Registers a trigger to call back on message, needs the OpenWhisk credentials to call the API 
+    // Registers a trigger to call back on message, needs the OpenWhisk credentials to call the API
     app.post('/mqtt', function (req, res) {
         // trigger (namespace/name), url, topic, openWhiskUsername, openWhiskPassword, watsonUsername, watsonPassword, watsonClientId
         feed_controller.add_trigger(req.body).then(() => res.send())

@@ -15,9 +15,9 @@
  */
 
 /*
-Users register new Feeds by providing a custom Action to the platform. 
-This Action is invoked each time the Feed is bound to a new Trigger. 
-Authentication credentials, supporting Trigger invocation through the 
+Users register new Feeds by providing a custom Action to the platform.
+This Action is invoked each time the Feed is bound to a new Trigger.
+Authentication credentials, supporting Trigger invocation through the
 OpenWhisk API, are passed in as invocation parameters.
 */
 
@@ -34,6 +34,8 @@ function main (params) {
 }
 
 function create (params) {
+    console.log(params.triggerName);
+
     // These are the Watson IoT credentials, used for subscribing to the topic
     if (!params.hasOwnProperty('url') ||
         !params.hasOwnProperty('topic') ||
@@ -49,7 +51,8 @@ function create (params) {
 
     // Send both the OpenWhisk credentials and the Watson IoT credentials, topic, and URL
     var body = {
-        trigger: params.triggerName.slice(1),
+        namespace: user_pass[0],
+        trigger: params.triggerName.slice(3),
         url: params.url,
         topic: params.topic,
         openWhiskUsername: user_pass[0],
@@ -67,9 +70,11 @@ function create (params) {
 }
 
 function remove (params) {
+  // These are the OpenWhisk credentials, used for setting up the trigger
+  var user_pass = params.authKey.split(':');
   request({
       method: "DELETE",
-      uri: params.provider_endpoint + params.triggerName
+      uri: params.provider_endpoint + user_pass[0] + '/' + params.triggerName.slice(3)
   }, handle_response);
 }
 
