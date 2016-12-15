@@ -68,7 +68,9 @@ Log into the Bluemix console and create a [SendGrid](https://console.ng.bluemix.
 * Finally, create a message consuming application connection using the same steps as for the devices, except for the "Client ID" which will be `a:$WATSON_TEAM_ID:openfridge`, and your "Username" and "Password" which will be your API Key information from the previous section (key and token). Update the `WATSON_USERNAME`, `WATSON_PASSWORD` and `WATSON_CLIENT` in `local.env` accordingly.
 
 ### Connect to IoT Platform and post a message
-* First, let's subscribe the application to receive messages from all devices. Add a "Subscription" to the `iot-2/type/+/id/+/evt/+/fmt/json` topic. Note that this queue format is different from the ones the devices post to because it contains wildcards. Update the topic also in `local.env` file.
+* First, let's subscribe the consuming application connection to receive messages from all devices. Add a "Subscription" to the `iot-2/type/+/id/+/evt/+/fmt/json` topic and Subscribe (you may have to click Connect and Subscribe again if you lose the connection). Note that this queue format is different from the ones the devices post to because it contains wildcards. Update the topic in `local.env` file to match.
+![Subscription view](subscribe.png)
+
 * From the device simulators, then publish a test message onto the Device Type topic. You can find [sample messages for 3 devices here](sample-messages.txt).
 * Enter the "Topic" as `iot-2/evt/refrigerator-simulator/fmt/json` in the "Publication" area.
 * Enter the sample JSON, making sure the Serial matches your Device.
@@ -80,7 +82,12 @@ Log into the Bluemix console and create a [SendGrid](https://console.ng.bluemix.
     "timestamp": 1466632598
 }
 ```
-* Look back at the History tab for the application, and you should see the message has been received. Now that we've tested connectivity, let's use a Cloud Foundry application to be the application we use to listen for events on that MQTT topic.
+![Publication view](publish.png)
+
+* Look back at the History tab for the application, and you should see the message has been received.
+![Received view](received.png)
+
+Now that we've tested connectivity for the Watson IoT platform with our devices, let's use a Cloud Foundry application to be the subscriber we use to listen for events on that MQTT topic.
 
 ### Add a record for this device in Cloudant
 The `CLOUDANT_APPLIANCE_DATABASE` database is a listing of documents that map a customer to a particular appliance, so create one or more documents that map the `appliance_serial` to a particular owner. You can find [sample appliance documents for 3 devices here](sample-appliances.txt)
