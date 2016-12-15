@@ -1,25 +1,26 @@
-// Expires June 30, 2016:   1467259200
-// Expires July 30, 2016:   1469851200
-// Expires August 30, 2016: 1472529600
+// You can use this site to create new timestamps from a date string:
+// http://www.unixtimestampconverter.com/
 
-// Sent on July 6, 2016: 1467817852
+// See the sample-appliances.txt file for appliance warrant expiration times
+
+// Sent on December 15, 2016: 1481778000
 {
     "appliance_serial": "aaaabbbbcccc",
     "part_number": "ddddeeeeffff",
-    "reading": "15",
-    "timestamp": 1467817852
+    "reading": "10",
+    "timestamp": 1481778000
 }
 
 {
     "appliance_serial": "llllmmmmnnnn",
     "part_number": "ddddeeeeffff",
-    "reading": "15",
-    "timestamp": 1467817852
+    "reading": "12",
+    "timestamp": 1481778000
 }
 
 {
     "appliance_serial": "xxxxyyyyzzzz",
     "part_number": "ddddeeeeffff",
     "reading": "15",
-    "timestamp": 1467817852
+    "timestamp": 1481778000
 }

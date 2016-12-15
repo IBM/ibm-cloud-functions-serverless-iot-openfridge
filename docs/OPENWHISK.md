@@ -2,8 +2,9 @@
 If you haven't already, download, install, and test the [`wsk` CLI tool](https://new-console.ng.bluemix.net/openwhisk/cli).
 
 From this point forward, you can instead just run the following commands to set up the OpenWhisk resources with a deployment script:
-* Make sure `local.env` is complete. Run `source local.env`.
-* Run the `deploy.sh` script. For example, `./deploy.sh --install`
+* Make sure `local.env` is complete. Run `./deploy.sh --env` to see if all necessary variables are set.
+* Create the actions, trigger, rules, and package bindings with  `./deploy.sh --install`
+* If you run into any issues installing run `./deploy.sh --uninstall` to start with a fresh environment.
 
 Otherwise, read on if you want to understand how all the OpenWhisk actions, triggers, and rules come together or if you want to set them up yourself.
 
@@ -69,7 +70,7 @@ There are a few helper scripts in the `devops` directory.
 * `devops/refresh-rules.sh $ORG $SPACE` creates and destroys the triggers and rules.
 
 # End-to-end test
-In order to test the entire solution end-to-end, send a sample MQTT event using the Paho client (as outlined in [BLUEMIX.MD](BLUEMIX.MD)), and observe an email sent to the address registered with the device. 
+In order to test the entire solution end-to-end, send a sample MQTT event using the Paho client (as outlined in [BLUEMIX.MD](BLUEMIX.MD)), and observe an email sent to the address registered with the device.
 
 ## Troubleshooting
 For troubleshooting, use `cf logs openfridge` to see logs of the feed provider app, and OpenWhisk dashboard for logs and status of the various triggers and actions.

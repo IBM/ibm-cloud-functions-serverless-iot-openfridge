@@ -1,0 +1,35 @@
+// Here are three sample appliances you can insert into the appliance
+// database. Enter them as individual documents.
+
+// You can use this site to create new timestamps from a date string:
+// http://www.unixtimestampconverter.com/
+
+// Warranty expires on January 31, 2017:    1485838800
+{
+  "_id": "aaaabbbbcccc",
+  "serial": "aaaabbbbcccc",
+  "warranty_expiration": 1485838800,
+  "owner_name": "Daniel Krook",
+  "owner_email": "krook@example.com",
+  "owner_phone": "18885551212"
+}
+
+// Warranty expires on December 16, 2016:   1481864400
+{
+  "_id": "aaaabbbbcccc",
+  "serial": "aaaabbbbcccc",
+  "warranty_expiration": 1481864400,
+  "owner_name": "Daniel Krook",
+  "owner_email": "krook@example.com",
+  "owner_phone": "18885551212"
+}
+
+// Warranty expires on November 30, 2016:   1480482000
+{
+  "_id": "aaaabbbbcccc",
+  "serial": "aaaabbbbcccc",
+  "warranty_expiration": 1480482000,
+  "owner_name": "Daniel Krook",
+  "owner_email": "krook@example.com",
+  "owner_phone": "18885551212"
+}

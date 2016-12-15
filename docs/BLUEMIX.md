@@ -7,8 +7,8 @@ After completing the steps here, proceed to [set up the OpenWhisk actions, trigg
 Start by copying `template.local.env` to a new `local.env` file. You can fill in additional details as you go through the steps below. The `.gitignore` file will prevent that private file from being pushed to source control if you push modifications to your own fork.
 
 ### Set up Cloudant
-Log into the [Bluemix console](https://console.ng.bluemix.net/) and create a [Cloudant instance](https://console.ng.bluemix.net/catalog/services/cloudant-nosql-db/?taxonomyNavigation=services). You can reuse an existing instance if you already have one. 
-**Important**: the name of the Cloudant service instance must start with the `cloudant` prefix (case insensitive), for example `cloudant-openfridge`. 
+Log into the [Bluemix console](https://console.ng.bluemix.net/) and create a [Cloudant instance](https://console.ng.bluemix.net/catalog/services/cloudant-nosql-db/?taxonomyNavigation=services). You can reuse an existing instance if you already have one.
+**Important**: the name of the Cloudant service instance must start with the `cloudant` prefix (case insensitive), for example `cloudant-openfridge`.
 
 Update `CLOUDANT_INSTANCE` in `local.env` to reflect the name of the Cloudant service instance and ensure it matches what's set in `feeds/cf/mqtt/manifest.yml`. Then set the `CLOUDANT_USERNAME` and `CLOUDANT_PASSWORD` values in `local.env` based on the credentials for the service.
 
@@ -16,7 +16,7 @@ Launch the Cloudant console and create three databases. Set their names in the `
 
 Create one more `topic_listeners` database in Cloudant, which will manage the state of the MQTT subscriptions. Then add this Design Document to the database:
 
-```
+```json
 {
   "_id": "_design/subscriptions",
   "views": {
@@ -38,7 +38,7 @@ Create one more `topic_listeners` database in Cloudant, which will manage the st
 ```
 
 ### Set up SendGrid
-Log into the Bluemix console and create a [SendGrid](https://console.ng.bluemix.net/catalog/services/sendgrid/?taxonomyNavigation=services) instance. If you don't want to pay for the minimum plan, you can go to [SendGrid directly to request a free trial](http://sendgrid.com/). Follow the developer documentation to configure an API key. Update `local.env` accordingly. There is additional information on [configuring SendGrid with Bluemix here](https://www.ibm.com/blogs/bluemix/2016/12/using-sendgrid-easy-sending-email/).
+Log into the Bluemix console and create a [SendGrid](https://console.ng.bluemix.net/catalog/services/sendgrid/?taxonomyNavigation=services) instance. If you don't want to pay for the minimum plan, you can go to [SendGrid directly to request a free trial](http://sendgrid.com/). Follow the developer documentation to configure an API key. Update `local.env` accordingly. There is important additional information on [configuring SendGrid with Bluemix here](https://www.ibm.com/blogs/bluemix/2016/12/using-sendgrid-easy-sending-email/) in case you run into any issues.
 
 ## Set up IoT Foundation
 
@@ -69,10 +69,10 @@ Log into the Bluemix console and create a [SendGrid](https://console.ng.bluemix.
 
 ### Connect to IoT Platform and post a message
 * First, let's subscribe the application to receive messages from all devices. Add a "Subscription" to the `iot-2/type/+/id/+/evt/+/fmt/json` topic. Note that this queue format is different from the ones the devices post to because it contains wildcards. Update the topic also in `local.env` file.
-* From the device simulators, then publish a test message onto the Device Type topic:
+* From the device simulators, then publish a test message onto the Device Type topic. You can find [sample messages for 3 devices here](docs/sample-messages.txt).
 * Enter the "Topic" as `iot-2/evt/refrigerator-simulator/fmt/json` in the "Publication" area.
 * Enter the sample JSON, making sure the Serial matches your Device.
-```
+```json
 {
     "appliance_serial": "aaaabbbbcccc",
     "part_number": "ddddeeeeffff",
@@ -83,9 +83,9 @@ Log into the Bluemix console and create a [SendGrid](https://console.ng.bluemix.
 * Look back at the History tab for the application, and you should see the message has been received. Now that we've tested connectivity, let's use a Cloud Foundry application to be the application we use to listen for events on that MQTT topic.
 
 ### Add a record for this device in Cloudant
-The `CLOUDANT_APPLIANCE_DATABASE` database is a listing of documents that map a customer to a particular appliance, so create one or more documents that map the `appliance_serial` to a particular owner:
+The `CLOUDANT_APPLIANCE_DATABASE` database is a listing of documents that map a customer to a particular appliance, so create one or more documents that map the `appliance_serial` to a particular owner. You can find [sample appliance documents for 3 devices here](docs/sample-appliances.txt)
 
-```
+```json
 {
   "_id": "aaaabbbbcccc",
   "serial": "aaaabbbbcccc",
@@ -95,15 +95,15 @@ The `CLOUDANT_APPLIANCE_DATABASE` database is a listing of documents that map a 
   "owner_phone": "18885551212"
 }
 ```
-**Notice**: the email address specified here will be eventually used to send email notifications by the OpenWhisk actions - make sure it is valid.
+**Important**: the email address specified here will be eventually used to receive email notifications by the OpenWhisk actions - make sure it is valid.
 
 ## Create MQTT feed provider
-Since there isn't a shared MQTT event producer available as a package on OpenWhisk today, we need to set up a proxy application that will subscribe to an MQTT topic, and in turn invoke our OpenWhisk action on new messages.
+Since there isn't a single multitenant MQTT event producer available as a package on OpenWhisk today, we need to set up a proxy application that will subscribe to an MQTT topic, and in turn invoke our OpenWhisk action on new messages.
 
 ### Start up an instance of the MQTT feed consumer as a Cloud Foundry app
 * Download the [`cf` CLI](https://console.ng.bluemix.net/docs/cli/index.html#cli) and [connect to Bluemix](https://console.ng.bluemix.net/docs/cfapps/ee.html#ee_cf).
 * Clone this repository, change to the `feeds/cf/mqtt` directory, update the `manifest.yml` file (provide a unique host and the name of the Cloudant service) and then use `cf push` to deploy it to Bluemix. Also, set this hostname in `local.env` as the `$CF_PROXY_HOST` value. For example, "openfridge-of".
-* You can verify the app is deployed and ready by going to `http://$CF_PROXY_HOST.mybluemix.net/` with your web browser.
+* You can verify the app is deployed and ready by browsing to `http://$CF_PROXY_HOST.mybluemix.net/`.
 
 ## Next steps
 After completing the steps here, proceed to [set up the OpenWhisk actions, triggers, and rules](OPENWHISK.md).
