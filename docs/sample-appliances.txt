@@ -16,8 +16,8 @@
 
 // Warranty expires on December 16, 2016:   1481864400
 {
-  "_id": "aaaabbbbcccc",
-  "serial": "aaaabbbbcccc",
+  "_id": "llllmmmmnnnn",
+  "serial": "llllmmmmnnnn",
   "warranty_expiration": 1481864400,
   "owner_name": "Daniel Krook",
   "owner_email": "krook@example.com",
@@ -26,8 +26,8 @@
 
 // Warranty expires on November 30, 2016:   1480482000
 {
-  "_id": "aaaabbbbcccc",
-  "serial": "aaaabbbbcccc",
+  "_id": "xxxxyyyyzzzz",
+  "serial": "xxxxyyyyzzzz",
   "warranty_expiration": 1480482000,
   "owner_name": "Daniel Krook",
   "owner_email": "krook@example.com",
