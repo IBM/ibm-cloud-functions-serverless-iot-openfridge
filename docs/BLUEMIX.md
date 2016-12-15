@@ -27,7 +27,7 @@ Create one more `topic_listeners` database in Cloudant, which will manage the st
       "map": "function (doc) {\n  emit(doc.url + '#' + doc.topic, {trigger: doc._id, openWhiskUsername: doc.openWhiskUsername, openWhiskPassword: doc.openWhiskPassword, username: doc.watsonUsername, password: doc.watsonPassword, clientId: doc.watsonClientId});\n}"
     },
     "all": {
-      "map": "function (doc) {\n  emit(doc._id, doc.url + '#' + doc.topic);\n}"
+      "map": "function (doc) {\n  emit(doc._id, doc.url + '#' + doc.topic, {trigger: doc._id, openWhiskUsername: doc.openWhiskUsername, openWhiskPassword: doc.openWhiskPassword, username: doc.watsonUsername, password: doc.watsonPassword, clientId: doc.watsonClientId});\n}"
     },
     "host_triggers": {
       "map": "function (doc) {\n  emit(doc.url, {trigger: doc._id, openWhiskUsername: doc.openWhiskUsername, openWhiskPassword: doc.openWhiskPassword, username: doc.watsonUsername, password: doc.watsonPassword, clientId: doc.watsonClientId});\n}"

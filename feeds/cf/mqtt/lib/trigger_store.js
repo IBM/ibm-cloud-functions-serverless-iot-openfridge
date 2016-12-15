@@ -47,7 +47,7 @@ class TriggerStore {
     subscribers () {
         const _view = Promise.promisify(this.db.view, {context: this.db});
         const extract_subscribers = body => body.rows.map(row => {
-          return {trigger: row.key, topic: row.value};
+          return {trigger: row.key, url: row.value.url, topic: row.value.topic, username: row.value.username, password: row.value.password, clientId: row.value.clientId};
         })
         return _view('subscriptions', 'all').then(extract_subscribers);
     }

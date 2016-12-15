@@ -33,6 +33,7 @@ class MQTTSubscriptionMgr extends EventEmitter {
     }
 
     setup_client (url, username, password, clientId) {
+        console.log(url, username, password, clientId);
         const client = this.mqtt.connect(url, {
             username: username,
             password: password,

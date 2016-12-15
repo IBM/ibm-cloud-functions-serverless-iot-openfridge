@@ -35,7 +35,7 @@ class FeedController {
 
         console.log(`Subscribing on start in initialise()`);
         return this.trigger_store.subscribers().then(subscribers => {
-            subscribers.forEach(s => mgr.subscribe.apply(mgr, s.topic.split('#')));
+            subscribers.forEach(s => mgr.subscribe.apply(mgr, [s.url, s.topic, s.username, s.password, s.clientId]));
         }).catch(err => {
             console.error('Error initialising subscribers from CouchDB store.' , err);
             return Promise.reject('Unable to initialise due to store failure.');
