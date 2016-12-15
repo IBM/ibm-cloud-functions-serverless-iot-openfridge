@@ -52,7 +52,7 @@ function install() {
     -p url "ssl://$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com:8883" \
     -p username "$WATSON_USERNAME" \
     -p password "$WATSON_PASSWORD" \
-    -p client "$WATSON_CLIENT" -v
+    -p client "$WATSON_CLIENT"
   $WSK trigger create service-trigger \
     -f "$CLOUDANT_INSTANCE"/changes \
     -p dbname "$CLOUDANT_SERVICE_DATABASE"

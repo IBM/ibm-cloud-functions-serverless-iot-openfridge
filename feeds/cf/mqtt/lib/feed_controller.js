@@ -58,12 +58,12 @@ class FeedController {
     }
 
     fire_trigger (trigger, params) {
-        console.log(`Firing trigger: ${trigger.trigger}`, params);
         const namespace = '_';
         const name = trigger.trigger.split('/')[1];
+        console.log(`Firing trigger: /${namespace}/${name}`, params);
         var ow = openwhisk({api: this.ow_endpoint, api_key: `${trigger.openWhiskUsername}:${trigger.openWhiskPassword}`, namespace: namespace});
-        ow.triggers.invoke({triggerName: name, params: params, namespace: namespace})
-          .catch(err => console.error(`Failed to fire trigger ${trigger.trigger}`, err, ow))
+        ow.triggers.invoke({triggerName: name, params: params})
+          .catch(err => console.error(`Failed to fire trigger /${namespace}/${name}`, err, ow))
     }
 
     // trigger: trigger (namespace/name), url, topic, openWhiskUsername, openWhiskPassword, watsonUsername, watsonPassword, watsonClientId
