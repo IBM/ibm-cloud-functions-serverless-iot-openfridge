@@ -69,7 +69,7 @@ Log into the Bluemix console and create a [SendGrid](https://console.ng.bluemix.
 
 ### Connect to IoT Platform and post a message
 * First, let's subscribe the application to receive messages from all devices. Add a "Subscription" to the `iot-2/type/+/id/+/evt/+/fmt/json` topic. Note that this queue format is different from the ones the devices post to because it contains wildcards. Update the topic also in `local.env` file.
-* From the device simulators, then publish a test message onto the Device Type topic. You can find [sample messages for 3 devices here](docs/sample-messages.txt).
+* From the device simulators, then publish a test message onto the Device Type topic. You can find [sample messages for 3 devices here](sample-messages.txt).
 * Enter the "Topic" as `iot-2/evt/refrigerator-simulator/fmt/json` in the "Publication" area.
 * Enter the sample JSON, making sure the Serial matches your Device.
 ```json
@@ -83,7 +83,7 @@ Log into the Bluemix console and create a [SendGrid](https://console.ng.bluemix.
 * Look back at the History tab for the application, and you should see the message has been received. Now that we've tested connectivity, let's use a Cloud Foundry application to be the application we use to listen for events on that MQTT topic.
 
 ### Add a record for this device in Cloudant
-The `CLOUDANT_APPLIANCE_DATABASE` database is a listing of documents that map a customer to a particular appliance, so create one or more documents that map the `appliance_serial` to a particular owner. You can find [sample appliance documents for 3 devices here](docs/sample-appliances.txt)
+The `CLOUDANT_APPLIANCE_DATABASE` database is a listing of documents that map a customer to a particular appliance, so create one or more documents that map the `appliance_serial` to a particular owner. You can find [sample appliance documents for 3 devices here](sample-appliances.txt)
 
 ```json
 {
