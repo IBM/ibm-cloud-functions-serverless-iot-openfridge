@@ -89,7 +89,7 @@ Log into the Bluemix console and create a [SendGrid](https://console.ng.bluemix.
 
 Now that we've tested connectivity for the Watson IoT platform with our devices, let's use a Cloud Foundry application to be the subscriber we use to listen for events on that MQTT topic.
 
-### Add a record for this device in Cloudant
+### Add records for each device in Cloudant
 The `CLOUDANT_APPLIANCE_DATABASE` database is a listing of documents that map a customer to a particular appliance, so create one or more documents that map the `appliance_serial` to a particular owner. You can find [sample appliance documents for 3 devices here](sample-appliances.txt)
 
 ```json
@@ -105,11 +105,11 @@ The `CLOUDANT_APPLIANCE_DATABASE` database is a listing of documents that map a 
 **Important**: the email address specified here will be eventually used to receive email notifications by the OpenWhisk actions - make sure it is valid.
 
 ## Create MQTT feed provider
-Since there isn't a single multitenant MQTT event producer available as a package on OpenWhisk today, we need to set up a proxy application that will subscribe to an MQTT topic, and in turn invoke our OpenWhisk action on new messages.
+Since there isn't a single multi-tenant MQTT event producer available as a package on OpenWhisk today, we need to set up a proxy application that will subscribe to an MQTT topic, and in turn invoke our OpenWhisk action on new messages.
 
 ### Start up an instance of the MQTT feed consumer as a Cloud Foundry app
 * Download the [`cf` CLI](https://console.ng.bluemix.net/docs/cli/index.html#cli) and [connect to Bluemix](https://console.ng.bluemix.net/docs/cfapps/ee.html#ee_cf).
-* Clone this repository, change to the `feeds/cf/mqtt` directory, update the `manifest.yml` file (provide a unique host and the name of the Cloudant service) and then use `cf push` to deploy it to Bluemix. Also, set this hostname in `local.env` as the `$CF_PROXY_HOST` value. For example, "openfridge-of".
+* Clone this repository, change to the `feeds/cf/mqtt` directory, update the `manifest.yml` file (provide a unique host and the name of the Cloudant service) and then use `cf push` to deploy it to Bluemix. Also, set this hostname in `local.env` as the `$CF_PROXY_HOST` value. For example, "openfridge", but remember that it must be globally unique.
 * You can verify the app is deployed and ready by browsing to `http://$CF_PROXY_HOST.mybluemix.net/`.
 
 ## Next steps
