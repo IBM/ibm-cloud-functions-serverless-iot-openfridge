@@ -74,7 +74,7 @@ function remove (params) {
   var user_pass = params.authKey.split(':');
   request({
       method: "DELETE",
-      uri: params.provider_endpoint + user_pass[0] + '/' + params.triggerName.slice(3)
+      uri: params.provider_endpoint  + '/' + user_pass[0] + '/' + params.triggerName.slice(3)
   }, handle_response);
 }
 

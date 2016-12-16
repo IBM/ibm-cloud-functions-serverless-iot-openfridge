@@ -118,10 +118,10 @@ function uninstall() {
   $WSK action delete mqtt/mqtt-feed-action
 
   echo "Removing triggers..."
-  $WSK trigger delete openfridge-feed-trigger
   $WSK trigger delete service-trigger
   $WSK trigger delete order-trigger
   $WSK trigger delete check-warranty-trigger
+  $WSK trigger delete openfridge-feed-trigger
 
   echo "Removing packages..."
   $WSK package delete mqtt

@@ -59,7 +59,7 @@ class FeedController {
 
     fire_trigger (trigger, params) {
         const namespace = '_';
-        const name = trigger.trigger.split('/')[1];
+        const name = (trigger.trigger.indexOf('/') !== -1 ) ? trigger.trigger.split('/')[1] : trigger.trigger;
         console.log(`Firing trigger: /${namespace}/${name}`, params);
         var ow = openwhisk({api: this.ow_endpoint, api_key: `${trigger.openWhiskUsername}:${trigger.openWhiskPassword}`, namespace: namespace});
         ow.triggers.invoke({triggerName: name, params: params})
