@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 var Cloudant = require('cloudant');
 var request = require('request');
 
@@ -54,40 +54,30 @@ function main(params) {
         send(email, subject, content);
     } else {
         // Triggered by a change event in the order database.
-        orderDb.get(params.id, function (err, body, head) {
-          if (err) {
-            console.log('[alert-customer-event.main] error: orderDb');
-            console.log(err);
-            whisk.done({result: 'Error occurred fetching service record.' });
-          } else {
-            console.log('[alert-customer-event.main] success: orderDb');
-            console.log(body);
-            var order = body;
-            if (order.status == 'ordered') {
-                // The order was automatically placed for them (in warranty).
-                console.log('[alert-customer-event.main] triggered by a newly ordered order under warranty.');
-                email = order.owner_email;
-                subject = 'Part automatically ordered for appliance: ' + order.appliance_serial;
-                content = 'Your appliance told us that one of its parts needed a replacement. Since it is still under warranty until ';
-                content += format(order.appliance_warranty_expiration) + ', we have automatically ordered a replacement. ';
-                content += 'It will be delivered soon.';
-                send(email, subject, content);
-            } else if (order.status == 'pending') {
-                // The order was entered in pending mode (not in warranty).
-                console.log('[alert-customer-event.main] triggered by a newly pending order out of warranty.');
-                email = order.owner_email;
-                subject = 'Part ready to order for appliance: ' + order.appliance_serial;
-                content = 'Your appliance told us that one of its parts needed a replacement. Since it is no longer under warranty ';
-                content+= '(it expired on ' + format(order.appliance_warranty_expiration) + '), you will need to approve the pending order. ';
-                content += 'Complete the form with your payment and the part will be on its way soon.';
-                send(email, subject, content);
-            } else {
-                // Some other order status we're not implementing at the moment.
-                console.log('[alert-customer-event.main] triggered by some other order status.');
-            }
-          }
-        });
-
+        var order = params;
+        if (order.status == 'ordered') {
+            // The order was automatically placed for them (in warranty).
+            console.log('[alert-customer-event.main] triggered by a newly ordered order under warranty.');
+            email = order.owner_email;
+            subject = 'Part automatically ordered for appliance: ' + order.appliance_serial;
+            content = 'Your appliance told us that one of its parts needed a replacement. Since it is still under warranty until ';
+            content += format(order.appliance_warranty_expiration) + ', we have automatically ordered a replacement. ';
+            content += 'It will be delivered soon.';
+            send(email, subject, content);
+        } else if (order.status == 'pending') {
+            // The order was entered in pending mode (not in warranty).
+            console.log('[alert-customer-event.main] triggered by a newly pending order out of warranty.');
+            email = order.owner_email;
+            subject = 'Part ready to order for appliance: ' + order.appliance_serial;
+            content = 'Your appliance told us that one of its parts needed a replacement. Since it is no longer under warranty ';
+            content+= '(it expired on ' + format(order.appliance_warranty_expiration) + '), you will need to approve the pending order. ';
+            content += 'Complete the form with your payment and the part will be on its way soon.';
+            send(email, subject, content);
+        } else {
+            // Some other order status we're not implementing at the moment.
+            console.log('[alert-customer-event.main] triggered by some other order status.');
+            whisk.done({result: 'This workflow is not yet implemented.' });
+        }
     }
 
     // Convert from Unix timestamp

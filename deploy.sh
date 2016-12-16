@@ -108,6 +108,12 @@ function uninstall() {
   $WSK rule delete order-rule
   $WSK rule delete service-rule
 
+  echo "Removing triggers..."
+  $WSK trigger delete service-trigger
+  $WSK trigger delete order-trigger
+  $WSK trigger delete check-warranty-trigger
+  $WSK trigger delete openfridge-feed-trigger
+
   echo "Removing actions..."
   $WSK action delete analyze-service-event
   $WSK action delete create-order-event
@@ -116,12 +122,6 @@ function uninstall() {
   $WSK action delete service-sequence
   $WSK action delete order-sequence
   $WSK action delete mqtt/mqtt-feed-action
-
-  echo "Removing triggers..."
-  $WSK trigger delete service-trigger
-  $WSK trigger delete order-trigger
-  $WSK trigger delete check-warranty-trigger
-  $WSK trigger delete openfridge-feed-trigger
 
   echo "Removing packages..."
   $WSK package delete mqtt
