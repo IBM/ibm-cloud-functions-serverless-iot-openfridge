@@ -37,49 +37,53 @@ function install() {
 
   echo "Binding the Cloudant package"
   $WSK package bind /whisk.system/cloudant "$CLOUDANT_INSTANCE" \
-    -p username "$CLOUDANT_USERNAME" \
-    -p password "$CLOUDANT_PASSWORD" \
-    -p host "$CLOUDANT_USERNAME.cloudant.com"
+    --param username "$CLOUDANT_USERNAME" \
+    --param password "$CLOUDANT_PASSWORD" \
+    --param host "$CLOUDANT_USERNAME.cloudant.com"
 
   echo "Creating the MQTT package and feed action"
-  $WSK package create -p provider_endpoint "http://$CF_PROXY_HOST.mybluemix.net/mqtt" mqtt
-  $WSK action create -a feed true mqtt/mqtt-feed-action actions/mqtt-feed-action.js
+  $WSK package create \
+    --param provider_endpoint "http://$CF_PROXY_HOST.mybluemix.net/mqtt" \
+    mqtt
+  $WSK action create \
+    --annotation feed true \
+    mqtt/mqtt-feed-action actions/mqtt-feed-action.js
 
   echo "Creating triggers"
   $WSK trigger create openfridge-feed-trigger \
-    -f mqtt/mqtt-feed-action \
-    -p topic "$WATSON_TOPIC" \
-    -p url "ssl://$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com:8883" \
-    -p username "$WATSON_USERNAME" \
-    -p password "$WATSON_PASSWORD" \
-    -p client "$WATSON_CLIENT"
+    --feed mqtt/mqtt-feed-action \
+    --param topic "$WATSON_TOPIC" \
+    --param url "ssl://$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com:8883" \
+    --param username "$WATSON_USERNAME" \
+    --param password "$WATSON_PASSWORD" \
+    --param client "$WATSON_CLIENT"
   $WSK trigger create service-trigger \
-    -f "$CLOUDANT_INSTANCE"/changes \
-    -p dbname "$CLOUDANT_SERVICE_DATABASE"
+    --feed "$CLOUDANT_INSTANCE"/changes \
+    --param dbname "$CLOUDANT_SERVICE_DATABASE"
   $WSK trigger create order-trigger \
-    -f "$CLOUDANT_INSTANCE"/changes \
-    -p dbname "$CLOUDANT_ORDER_DATABASE"
+    --feed "$CLOUDANT_INSTANCE"/changes \
+    --param dbname "$CLOUDANT_ORDER_DATABASE"
   $WSK trigger create check-warranty-trigger \
-    -f /whisk.system/alarms/alarm \
-    -p cron "$ALARM_CRON" \
-    -p maxTriggers 10
+    --feed /whisk.system/alarms/alarm \
+    --param cron "$ALARM_CRON" \
+    --param maxTriggers 10
 
   echo "Creating actions"
   $WSK action create analyze-service-event actions/analyze-service-event.js \
-    -p CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
-    -p CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD"
+    --param CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
+    --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD"
   $WSK action create create-order-event actions/create-order-event.js \
-    -p CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
-    -p CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD"
+    --param CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
+    --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD"
   $WSK action create check-warranty-renewal actions/check-warranty-renewal.js \
-    -p CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
-    -p CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD" \
-    -p CURRENT_NAMESPACE "$CURRENT_NAMESPACE"
+    --param CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
+    --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD" \
+    --param CURRENT_NAMESPACE "$CURRENT_NAMESPACE"
   $WSK action create alert-customer-event actions/alert-customer-event.js \
-    -p CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
-    -p CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD" \
-    -p SENDGRID_API_KEY "$SENDGRID_API_KEY" \
-    -p SENDGRID_FROM_ADDRESS "$SENDGRID_FROM_ADDRESS"
+    --param CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
+    --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD" \
+    --param SENDGRID_API_KEY "$SENDGRID_API_KEY" \
+    --param SENDGRID_FROM_ADDRESS "$SENDGRID_FROM_ADDRESS"
   $WSK action create service-sequence \
     --sequence /$CURRENT_NAMESPACE/$CLOUDANT_INSTANCE/read,create-order-event
   $WSK action create order-sequence \
