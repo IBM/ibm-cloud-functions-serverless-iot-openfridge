@@ -34,8 +34,14 @@ var Cloudant = require('cloudant');
  */
 function main(params) {
 
-  // Read the MQTT inbound message JSON, removing newlines.
-  var service = JSON.parse(params.body.replace(/\r?\n|\r/g, ''));
+  // Read the MQTT inbound message JSON, removing newlines if it's a string.
+  console.log(params);
+  var service = {};
+  if (typeof params.body === "object") {
+    service = params.body;
+  } else {
+    service = JSON.parse(params.body.replace(/\r?\n|\r/g, ''));
+  }
 
   // Configure database connection
   var cloudant = new Cloudant({

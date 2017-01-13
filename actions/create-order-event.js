@@ -21,7 +21,10 @@ var Cloudant = require('cloudant');
  * 2a.  If in warranty, create request in order database with status of 'ordered', which will invoke alert-customer-event to send the appropriate email.
  * 2b.  If not in warranty, create request in order database with status of 'pending', which will invoke alert-customer-event to send the appropriate email.
  *
- * @param   params.id                  The id of the record in the Cloudant 'service' database
+ * @param   params._id                 The id of the record in the Cloudant 'service' database
+ * @param   params.appliance_serial    The appliance serial inserted in the Cloudant 'service' database
+ * @param   params.warranty_expiration The warranty expiration inserted in the Cloudant 'service' database
+ * @param   params.part_number         The part number inserted in the Cloudant 'service' database
  * @param   params.CLOUDANT_USERNAME   Cloudant username (set once at action update time)
  * @param   params.CLOUDANT_PASSWORD   Cloudant password (set once at action update time)
  * @return                             Standard OpenWhisk success/error response
@@ -29,10 +32,6 @@ var Cloudant = require('cloudant');
 function main(params) {
 
   console.log(params);
-
-  // Read the message from JSON.
-  var service = {};
-  var appliance = {};
 
   // Configure database connection
   var cloudant = new Cloudant({
@@ -53,11 +52,11 @@ function main(params) {
     } else {
       console.log('[create-order-event.main] success: applianceDb');
       console.log(body);
-      appliance = body;
+      var appliance = body;
 
       // Insert the new order object with a status of automatically 'ordered' or 'pending' based on warranty status.
       var status = 'pending';
-      if (appliance.warranty_expiration > Math.floor(Date.now() / 1000)) {
+      if (params.warranty_expiration > Math.floor(Date.now() / 1000)) {
         status = 'ordered';
       }
 
@@ -67,10 +66,10 @@ function main(params) {
           owner_phone: appliance.owner_phone,
           appliance_serial: appliance.serial,
           appliance_warranty_expiration: appliance.warranty_expiration,
-          part_number: appliance.part_number,
+          part_number: params.part_number,
           status: status,
           timestamp: Date.now(),
-          service_id: service._id
+          service_id: params._id
         },
         function(err, body, head) {
           if (err) {
