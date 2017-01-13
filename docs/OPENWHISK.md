@@ -116,9 +116,7 @@ Inside of the core OpenWhisk logic, we have the trigger we created above for the
 
 ## Create custom triggers and rules
 
-### Create the trigger for the feed action
-
-- Create the trigger:
+- Create the trigger for the feed action:
 
   ```bash
   wsk trigger create openfridge-feed-trigger \
@@ -130,9 +128,7 @@ Inside of the core OpenWhisk logic, we have the trigger we created above for the
     --param client "$WATSON_CLIENT"
   ```
 
-### Create the triggers for the Cloudant feeds
-
-- Create the trigger:
+- Create the triggers for the Cloudant feeds:
 
   ```bash
   wsk package bind /whisk.system/cloudant "$CLOUDANT_INSTANCE" \
@@ -147,9 +143,7 @@ Inside of the core OpenWhisk logic, we have the trigger we created above for the
     --param dbname "$CLOUDANT_ORDER_DATABASE"
   ```
 
-### Create the trigger for the periodic warranty check
-
-- Create the trigger:
+- Create the trigger for the periodic warranty check:
 
   ```bash
   wsk trigger create check-warranty-trigger \
@@ -157,8 +151,6 @@ Inside of the core OpenWhisk logic, we have the trigger we created above for the
     --param cron "$ALARM_CRON" \
     --param maxTriggers 10
   ```
-
-### Create rules
 
 - Create the rules:
 
