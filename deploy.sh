@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2016 IBM Corp. All Rights Reserved.
+# Copyright 2016-2017 IBM Corp. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the “License”);
 # you may not use this file except in compliance with the License.
@@ -23,11 +23,6 @@ NC='\033[0m'
 # Load configuration variables
 source local.env
 
-# Capture the namespace where actions will be created
-WSK='wsk'
-CURRENT_NAMESPACE=`$WSK property get --namespace | sed -n -e 's/^whisk namespace//p' | tr -d '\t '`
-echo "Current namespace is $CURRENT_NAMESPACE."
-
 function usage() {
   echo -e "${YELLOW}Usage: $0 [--install,--uninstall,--env]${NC}"
 }
@@ -36,64 +31,64 @@ function install() {
   echo -e "${YELLOW}Installing OpenWhisk actions, triggers, and rules for OpenFridge..."
 
   echo "Binding the Cloudant package"
-  $WSK package bind /whisk.system/cloudant "$CLOUDANT_INSTANCE" \
+  wsk package bind /whisk.system/cloudant "$CLOUDANT_INSTANCE" \
     --param username "$CLOUDANT_USERNAME" \
     --param password "$CLOUDANT_PASSWORD" \
     --param host "$CLOUDANT_USERNAME.cloudant.com"
 
   echo "Creating the MQTT package and feed action"
-  $WSK package create \
+  wsk package create \
     --param provider_endpoint "http://$CF_PROXY_HOST.mybluemix.net/mqtt" \
     mqtt
-  $WSK action create \
+  wsk action create \
     --annotation feed true \
     mqtt/mqtt-feed-action actions/mqtt-feed-action.js
 
   echo "Creating triggers"
-  $WSK trigger create openfridge-feed-trigger \
+  wsk trigger create openfridge-feed-trigger \
     --feed mqtt/mqtt-feed-action \
     --param topic "$WATSON_TOPIC" \
     --param url "ssl://$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com:8883" \
     --param username "$WATSON_USERNAME" \
     --param password "$WATSON_PASSWORD" \
     --param client "$WATSON_CLIENT"
-  $WSK trigger create service-trigger \
+  wsk trigger create service-trigger \
     --feed "$CLOUDANT_INSTANCE"/changes \
     --param dbname "$CLOUDANT_SERVICE_DATABASE"
-  $WSK trigger create order-trigger \
+  wsk trigger create order-trigger \
     --feed "$CLOUDANT_INSTANCE"/changes \
     --param dbname "$CLOUDANT_ORDER_DATABASE"
-  $WSK trigger create check-warranty-trigger \
+  wsk trigger create check-warranty-trigger \
     --feed /whisk.system/alarms/alarm \
     --param cron "$ALARM_CRON" \
     --param maxTriggers 10
 
   echo "Creating actions"
-  $WSK action create analyze-service-event actions/analyze-service-event.js \
+  wsk action create analyze-service-event actions/analyze-service-event.js \
     --param CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
     --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD"
-  $WSK action create create-order-event actions/create-order-event.js \
+  wsk action create create-order-event actions/create-order-event.js \
     --param CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
     --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD"
-  $WSK action create check-warranty-renewal actions/check-warranty-renewal.js \
+  wsk action create check-warranty-renewal actions/check-warranty-renewal.js \
     --param CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
     --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD" \
     --param CURRENT_NAMESPACE "$CURRENT_NAMESPACE"
-  $WSK action create alert-customer-event actions/alert-customer-event.js \
+  wsk action create alert-customer-event actions/alert-customer-event.js \
     --param CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
     --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD" \
     --param SENDGRID_API_KEY "$SENDGRID_API_KEY" \
     --param SENDGRID_FROM_ADDRESS "$SENDGRID_FROM_ADDRESS"
-  $WSK action create service-sequence \
+  wsk action create service-sequence \
     --sequence /$CURRENT_NAMESPACE/$CLOUDANT_INSTANCE/read,create-order-event
-  $WSK action create order-sequence \
+  wsk action create order-sequence \
     --sequence /$CURRENT_NAMESPACE/$CLOUDANT_INSTANCE/read,alert-customer-event
 
   echo "Enabling rules"
-  $WSK rule create service-rule service-trigger service-sequence
-  $WSK rule create order-rule order-trigger order-sequence
-  $WSK rule create check-warranty-rule check-warranty-trigger check-warranty-renewal
-  $WSK rule create openfridge-feed-rule openfridge-feed-trigger analyze-service-event
+  wsk rule create service-rule service-trigger service-sequence
+  wsk rule create order-rule order-trigger order-sequence
+  wsk rule create check-warranty-rule check-warranty-trigger check-warranty-renewal
+  wsk rule create openfridge-feed-rule openfridge-feed-trigger analyze-service-event
 
   echo -e "${GREEN}Install Complete${NC}"
 }
@@ -102,34 +97,34 @@ function uninstall() {
   echo -e "${RED}Uninstalling..."
 
   echo "Removing rules..."
-  $WSK rule disable openfridge-feed-rule
-  $WSK rule disable check-warranty-rule
-  $WSK rule disable order-rule
-  $WSK rule disable service-rule
+  wsk rule disable openfridge-feed-rule
+  wsk rule disable check-warranty-rule
+  wsk rule disable order-rule
+  wsk rule disable service-rule
   sleep 1
-  $WSK rule delete openfridge-feed-rule
-  $WSK rule delete check-warranty-rule
-  $WSK rule delete order-rule
-  $WSK rule delete service-rule
+  wsk rule delete openfridge-feed-rule
+  wsk rule delete check-warranty-rule
+  wsk rule delete order-rule
+  wsk rule delete service-rule
 
   echo "Removing triggers..."
-  $WSK trigger delete service-trigger
-  $WSK trigger delete order-trigger
-  $WSK trigger delete check-warranty-trigger
-  $WSK trigger delete openfridge-feed-trigger
+  wsk trigger delete service-trigger
+  wsk trigger delete order-trigger
+  wsk trigger delete check-warranty-trigger
+  wsk trigger delete openfridge-feed-trigger
 
   echo "Removing actions..."
-  $WSK action delete analyze-service-event
-  $WSK action delete create-order-event
-  $WSK action delete check-warranty-renewal
-  $WSK action delete alert-customer-event
-  $WSK action delete service-sequence
-  $WSK action delete order-sequence
-  $WSK action delete mqtt/mqtt-feed-action
+  wsk action delete analyze-service-event
+  wsk action delete create-order-event
+  wsk action delete check-warranty-renewal
+  wsk action delete alert-customer-event
+  wsk action delete service-sequence
+  wsk action delete order-sequence
+  wsk action delete mqtt/mqtt-feed-action
 
   echo "Removing packages..."
-  $WSK package delete mqtt
-  $WSK package delete "$CLOUDANT_INSTANCE"
+  wsk package delete mqtt
+  wsk package delete "$CLOUDANT_INSTANCE"
 
   echo -e "${GREEN}Uninstall Complete${NC}"
 }
