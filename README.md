@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/krook/openfridge.svg?branch=master)](https://travis-ci.org/krook/openfridge)
+
 # Project OpenFridge
 
 This project provides a demo of serverless technology powered by OpenWhisk and used in the context of IoT. It highlights an edge-to-cloud scenario that integrates the Watson IoT platform, OpenWhisk, and Bluemix services to show an event-driven use case. It also demonstrates the programming models that enable this, and discusses the benefits relative to traditional cloud development approaches.
