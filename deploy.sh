@@ -14,6 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Exit if any command fails
+set -e
+
 # Color vars to be used in shell script output
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
@@ -34,15 +37,15 @@ function install() {
   wsk package bind /whisk.system/cloudant "$CLOUDANT_INSTANCE" \
     --param username "$CLOUDANT_USERNAME" \
     --param password "$CLOUDANT_PASSWORD" \
-    --param host "$CLOUDANT_USERNAME.cloudant.com" || die
+    --param host "$CLOUDANT_USERNAME.cloudant.com"
 
   echo "Creating the MQTT package and feed action"
   wsk package create \
     --param provider_endpoint "http://$CF_PROXY_HOST.mybluemix.net/mqtt" \
-    mqtt || die
+    mqtt
   wsk action create \
     --annotation feed true \
-    mqtt/mqtt-feed-action actions/mqtt-feed-action.js || die
+    mqtt/mqtt-feed-action actions/mqtt-feed-action.js
 
   echo "Creating triggers"
   wsk trigger create openfridge-feed-trigger \
@@ -51,44 +54,44 @@ function install() {
     --param url "ssl://$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com:8883" \
     --param username "$WATSON_USERNAME" \
     --param password "$WATSON_PASSWORD" \
-    --param client "$WATSON_CLIENT" || die
+    --param client "$WATSON_CLIENT"
   wsk trigger create service-trigger \
     --feed "$CLOUDANT_INSTANCE"/changes \
-    --param dbname "$CLOUDANT_SERVICE_DATABASE" || die
+    --param dbname "$CLOUDANT_SERVICE_DATABASE"
   wsk trigger create order-trigger \
     --feed "$CLOUDANT_INSTANCE"/changes \
-    --param dbname "$CLOUDANT_ORDER_DATABASE" || die
+    --param dbname "$CLOUDANT_ORDER_DATABASE"
   wsk trigger create check-warranty-trigger \
     --feed /whisk.system/alarms/alarm \
     --param cron "$ALARM_CRON" \
-    --param maxTriggers 100 || die
+    --param maxTriggers 100
 
   echo "Creating actions"
   wsk action create analyze-service-event actions/analyze-service-event.js \
     --param CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
-    --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD" || die
+    --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD"
   wsk action create create-order-event actions/create-order-event.js \
     --param CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
-    --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD" || die
+    --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD"
   wsk action create check-warranty-renewal actions/check-warranty-renewal.js \
     --param CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
     --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD" \
-    --param CURRENT_NAMESPACE "$CURRENT_NAMESPACE" || die
+    --param CURRENT_NAMESPACE "$CURRENT_NAMESPACE"
   wsk action create alert-customer-event actions/alert-customer-event.js \
     --param CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
     --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD" \
     --param SENDGRID_API_KEY "$SENDGRID_API_KEY" \
-    --param SENDGRID_FROM_ADDRESS "$SENDGRID_FROM_ADDRESS" || die
+    --param SENDGRID_FROM_ADDRESS "$SENDGRID_FROM_ADDRESS"
   wsk action create service-sequence \
-    --sequence /$CURRENT_NAMESPACE/$CLOUDANT_INSTANCE/read,create-order-event || die
+    --sequence /$CURRENT_NAMESPACE/$CLOUDANT_INSTANCE/read,create-order-event
   wsk action create order-sequence \
-    --sequence /$CURRENT_NAMESPACE/$CLOUDANT_INSTANCE/read,alert-customer-event || die
+    --sequence /$CURRENT_NAMESPACE/$CLOUDANT_INSTANCE/read,alert-customer-event
 
   echo "Enabling rules"
-  wsk rule create service-rule service-trigger service-sequence || die
-  wsk rule create order-rule order-trigger order-sequence || die
-  wsk rule create check-warranty-rule check-warranty-trigger check-warranty-renewal || die
-  wsk rule create openfridge-feed-rule openfridge-feed-trigger analyze-service-event || die
+  wsk rule create service-rule service-trigger service-sequence
+  wsk rule create order-rule order-trigger order-sequence
+  wsk rule create check-warranty-rule check-warranty-trigger check-warranty-renewal
+  wsk rule create openfridge-feed-rule openfridge-feed-trigger analyze-service-event
 
   echo -e "${GREEN}Install Complete${NC}"
 }
@@ -97,34 +100,34 @@ function uninstall() {
   echo -e "${RED}Uninstalling..."
 
   echo "Removing rules..."
-  wsk rule disable openfridge-feed-rule || die
-  wsk rule disable check-warranty-rule || die
-  wsk rule disable order-rule || die
-  wsk rule disable service-rule || die
+  wsk rule disable openfridge-feed-rule
+  wsk rule disable check-warranty-rule
+  wsk rule disable order-rule
+  wsk rule disable service-rule
   sleep 1
-  wsk rule delete openfridge-feed-rule || die
-  wsk rule delete check-warranty-rule || die
-  wsk rule delete order-rule || die
-  wsk rule delete service-rule || die
+  wsk rule delete openfridge-feed-rule
+  wsk rule delete check-warranty-rule
+  wsk rule delete order-rule
+  wsk rule delete service-rule
 
   echo "Removing triggers..."
-  wsk trigger delete service-trigger || die
-  wsk trigger delete order-trigger || die
-  wsk trigger delete check-warranty-trigger || die
-  wsk trigger delete openfridge-feed-trigger || die
+  wsk trigger delete service-trigger
+  wsk trigger delete order-trigger
+  wsk trigger delete check-warranty-trigger
+  wsk trigger delete openfridge-feed-trigger
 
   echo "Removing actions..."
-  wsk action delete analyze-service-event || die
-  wsk action delete create-order-event || die
-  wsk action delete check-warranty-renewal || die
-  wsk action delete alert-customer-event || die
-  wsk action delete service-sequence || die
-  wsk action delete order-sequence || die
-  wsk action delete mqtt/mqtt-feed-action || die
+  wsk action delete analyze-service-event
+  wsk action delete create-order-event
+  wsk action delete check-warranty-renewal
+  wsk action delete alert-customer-event
+  wsk action delete service-sequence
+  wsk action delete order-sequence
+  wsk action delete mqtt/mqtt-feed-action
 
   echo "Removing packages..."
-  wsk package delete mqtt || die
-  wsk package delete "$CLOUDANT_INSTANCE" || die
+  wsk package delete mqtt
+  wsk package delete "$CLOUDANT_INSTANCE"
 
   echo -e "${GREEN}Uninstall Complete${NC}"
 }
