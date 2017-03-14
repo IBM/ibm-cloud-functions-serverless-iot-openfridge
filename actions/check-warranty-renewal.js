@@ -27,7 +27,7 @@ var openwhisk = require('openwhisk');
  */
 function main(params) {
 
-  console.log(params);
+  // console.log(params);
 
   var wsk = openwhisk();
 

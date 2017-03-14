@@ -31,7 +31,7 @@ var Cloudant = require('cloudant');
  */
 function main(params) {
 
-  console.log(params);
+  // console.log(params);
 
   return new Promise(function(resolve, reject) {
 
