@@ -73,12 +73,17 @@ function create(params) {
 }
 
 function remove(params) {
-  // These are the OpenWhisk credentials, used for setting up the trigger
-  var user_pass = params.authKey.split(':');
-  request({
-    method: "DELETE",
-    uri: params.provider_endpoint + '/' + user_pass[0] + '/' + params.triggerName.slice(3)
-  }, handleResponse);
+
+  return new Promise(function(resolve, reject) {
+
+    // These are the OpenWhisk credentials, used for setting up the trigger
+    var user_pass = params.authKey.split(':');
+    request({
+      method: "DELETE",
+      uri: params.provider_endpoint + '/' + user_pass[0] + '/' + params.triggerName.slice(3)
+    }, handleResponse);
+
+  });
 
 }
 
