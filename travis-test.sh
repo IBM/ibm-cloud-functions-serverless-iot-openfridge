@@ -33,7 +33,8 @@ touch local.env # Configurations defined in travis-ci console
 echo "installing jq for bash json parsing"
 sudo apt-get install jq
 
-echo "Deploying wsk actions, etc."
+echo "Cleanly deploying wsk actions, etc."
+./deploy.sh --uninstall
 ./deploy.sh --install
 
 echo "Waiting for triggers/actions to finish installing (sleep 15)"
