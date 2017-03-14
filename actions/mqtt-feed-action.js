@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-var request = require('request');
+var request = require('request-promise');
 var openwhisk = require('openwhisk');
 
 /**
@@ -24,20 +24,20 @@ var openwhisk = require('openwhisk');
  * OpenWhisk API, are passed in as invocation parameters.
  */
 function main(params) {
-  return new Promise(function(resolve, reject) {
-    if (params.lifecycleEvent === 'CREATE') {
-      create(params);
-    } else if (params.lifecycleEvent === 'DELETE') {
-      remove(params);
-    }
-  });
+  if (params.lifecycleEvent === 'CREATE') {
+    return validate(params)
+      .then(params => create(params))
+      .then(res => ({success: 'MQTT feed: Success creating trigger'}))
+      .catch(err => ({ error: 'MQTT feed: Error invoking provider: ' + err }));
+  } else if (params.lifecycleEvent === 'DELETE') {
+    return remove(params)
+      .then(res => ({success: 'MQTT feed: Success deleting trigger'}))
+      .catch(err => ({ error: 'MQTT feed: Error invoking provider: ' + err }));
+  }
 }
 
-function create(params) {
-  console.log(params.triggerName);
-
+function validate(params) {
   return new Promise(function(resolve, reject) {
-
     // These are the Watson IoT credentials, used for subscribing to the topic
     if (!params.hasOwnProperty('url') ||
       !params.hasOwnProperty('topic') ||
@@ -46,62 +46,41 @@ function create(params) {
       !params.hasOwnProperty('client')
     ) {
       reject('Missing mandatory feed properties, must include url, topic, username, password, and client.');
+    } else {
+      // These are the OpenWhisk credentials, used for setting up the trigger
+      var user_pass = params.authKey.split(':');
+
+      // Send both the OpenWhisk credentials and the Watson IoT credentials, topic, and URL
+      params.body = {
+        namespace: user_pass[0],
+        trigger: params.triggerName.slice(3),
+        url: params.url,
+        topic: params.topic,
+        openWhiskUsername: user_pass[0],
+        openWhiskPassword: user_pass[1],
+        watsonUsername: params.username,
+        watsonPassword: params.password,
+        watsonClientId: params.client
+      };
+      resolve(params);
     }
+  });
+}
 
-    // These are the OpenWhisk credentials, used for setting up the trigger
-    var user_pass = params.authKey.split(':');
-
-    // Send both the OpenWhisk credentials and the Watson IoT credentials, topic, and URL
-    var body = {
-      namespace: user_pass[0],
-      trigger: params.triggerName.slice(3),
-      url: params.url,
-      topic: params.topic,
-      openWhiskUsername: user_pass[0],
-      openWhiskPassword: user_pass[1],
-      watsonUsername: params.username,
-      watsonPassword: params.password,
-      watsonClientId: params.client
-    };
-    console.dir(body);
-    request({
-      method: "POST",
-      uri: params.provider_endpoint,
-      json: body
-    }, handleResponse);
+function create(params) {
+  console.log(params.triggerName);
+  return request({
+    method: "POST",
+    uri: params.provider_endpoint,
+    json: params.body
   });
 }
 
 function remove(params) {
-
-  return new Promise(function(resolve, reject) {
-
-    // These are the OpenWhisk credentials, used for setting up the trigger
-    var user_pass = params.authKey.split(':');
-    request({
-      method: "DELETE",
-      uri: params.provider_endpoint + '/' + user_pass[0] + '/' + params.triggerName.slice(3)
-    }, handleResponse);
-
+  // These are the OpenWhisk credentials, used for setting up the trigger
+  var user_pass = params.authKey.split(':');
+  return request({
+    method: "DELETE",
+    uri: params.provider_endpoint + '/' + user_pass[0] + '/' + params.triggerName.slice(3)
   });
-
-}
-
-function handleResponse(err, res, body) {
-
-  return new Promise(function(resolve, reject) {
-
-    if (!err && res.statusCode === 200) {
-      console.log('MQTT feed: HTTP request success.');
-      resolve();
-    } else if (res) {
-      console.log('MQTT feed: Error invoking provider:', res.statusCode, body);
-      reject(body.error);
-    } else {
-      console.log('MQTT feed: Error invoking provider:', err);
-      reject(err);
-    }
-
-  });
-
 }

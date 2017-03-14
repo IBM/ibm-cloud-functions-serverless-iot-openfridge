@@ -37,7 +37,7 @@ function main(params) {
   return new Promise(function(resolve, reject) {
 
     // Read the MQTT inbound message JSON, removing newlines if it's a string.
-    console.log(params);
+    // console.log(params);
     var service = {};
     if (typeof params.body === "object") {
       service = params.body;

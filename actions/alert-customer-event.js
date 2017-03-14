@@ -32,7 +32,7 @@ var request = require('request');
 function main(params) {
 
   // Inspect the params sent to this action: Either invoked directly from check-warranty-renewal or via change to the 'order' database.
-  console.log(params);
+  // console.log(params);
 
   return new Promise(function(resolve, reject) {
 
@@ -121,5 +121,5 @@ function send(email, subject, content) {
       }
     });
   });
-  
+
 }
