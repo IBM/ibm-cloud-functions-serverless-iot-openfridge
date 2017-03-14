@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 IBM Corp. All Rights Reserved.
+ * Copyright 2016-2017 IBM Corp. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,50 +34,52 @@ var Cloudant = require('cloudant');
  */
 function main(params) {
 
-  // Read the MQTT inbound message JSON, removing newlines if it's a string.
-  console.log(params);
-  var service = {};
-  if (typeof params.body === "object") {
-    service = params.body;
-  } else {
-    service = JSON.parse(params.body.replace(/\r?\n|\r/g, ''));
-  }
+  return new Promise(function(resolve, reject) {
 
-  // Configure database connection
-  var cloudant = new Cloudant({
-    account: params.CLOUDANT_USERNAME,
-    password: params.CLOUDANT_PASSWORD
+    // Read the MQTT inbound message JSON, removing newlines if it's a string.
+    console.log(params);
+    var service = {};
+    if (typeof params.body === "object") {
+      service = params.body;
+    } else {
+      service = JSON.parse(params.body.replace(/\r?\n|\r/g, ''));
+    }
+
+    // Configure database connection
+    var cloudant = new Cloudant({
+      account: params.CLOUDANT_USERNAME,
+      password: params.CLOUDANT_PASSWORD
+    });
+    var serviceDb = cloudant.db.use('service');
+
+    // See if the reading is in some expected range (this simulates some analytics, such as a filter life being below 20%).
+    if (parseInt(service.reading) < 20) {
+      // If not, create a record in the service database.
+      serviceDb.insert({
+        appliance_serial: service.appliance_serial,
+        part_number: service.part_number,
+        reading: service.reading,
+        timestamp: service.timestamp
+      }, function(err, body, head) {
+        if (err) {
+          console.log('[analyze-service-event.main] error: ');
+          console.log(err);
+          reject({
+            result: 'Error occurred logging service record.'
+          });
+        } else {
+          console.log('[analyze-service-event.main] success: ');
+          console.log(body);
+          resolve({
+            result: 'Success. Service record logged.'
+          });
+        }
+      });
+    } else {
+      resolve({
+        result: 'No service needed.'
+      });
+    }
+
   });
-  var serviceDb = cloudant.db.use('service');
-
-  // See if the reading is in some expected range (this simulates some analytics, such as a filter life being below 20%).
-  if (parseInt(service.reading) < 20) {
-    // If not, create a record in the service database.
-    serviceDb.insert({
-      appliance_serial: service.appliance_serial,
-      part_number: service.part_number,
-      reading: service.reading,
-      timestamp: service.timestamp
-    }, function(err, body, head) {
-      if (err) {
-        console.log('[analyze-service-event.main] error: ');
-        console.log(err);
-        whisk.done({
-          result: 'Error occurred logging service record.'
-        });
-      } else {
-        console.log('[analyze-service-event.main] success: ');
-        console.log(body);
-        whisk.done({
-          result: 'Success. Service record logged.'
-        });
-      }
-    });
-  } else {
-    whisk.done({
-      result: 'No service needed.'
-    });
-  }
-
-  return whisk.async();
 }
