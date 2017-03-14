@@ -62,8 +62,7 @@ Inside of the core OpenWhisk logic, we have the trigger we created above for the
   ```bash
   wsk action create check-warranty-renewal actions/check-warranty-renewal.js \
     --param CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
-    --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD" \
-    --param CURRENT_NAMESPACE "$CURRENT_NAMESPACE"
+    --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD"
   ```
 
 - Create the customer alert action:
@@ -80,9 +79,9 @@ Inside of the core OpenWhisk logic, we have the trigger we created above for the
 
   ```bash
   wsk action create service-sequence \
-    --sequence /$CURRENT_NAMESPACE/$CLOUDANT_INSTANCE/read,create-order-event
+    --sequence /_/$CLOUDANT_INSTANCE/read,create-order-event
   wsk action create order-sequence \
-    --sequence /$CURRENT_NAMESPACE/$CLOUDANT_INSTANCE/read,alert-customer-event
+    --sequence /_/$CLOUDANT_INSTANCE/read,alert-customer-event
   ```
 
 ### Test the actions

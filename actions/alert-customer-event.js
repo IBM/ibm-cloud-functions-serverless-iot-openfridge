@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 IBM Corp. All Rights Reserved.
+ * Copyright 2016-2017 IBM Corp. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,62 +34,69 @@ function main(params) {
   // Inspect the params sent to this action: Either invoked directly from check-warranty-renewal or via change to the 'order' database.
   console.log(params);
 
-  // Configure database connection
-  var cloudant = new Cloudant({
-    account: params.CLOUDANT_USERNAME,
-    password: params.CLOUDANT_PASSWORD
-  });
-  var orderDb = cloudant.db.use('order');
+  return new Promise(function(resolve, reject) {
 
-  if (params.hasOwnProperty('appliance')) {
-    // Their warranty will expire soon.
-    // Invoked manually by the check-warranty-renewal action.
-    console.log('[alert-customer-event.main] invoked by check-warranty-renewal');
-    var appliance = params.appliance;
-    email = appliance.owner_email;
-    subject = 'Warranty expires soon for ' + appliance.serial;
-    content = 'Hello ' + appliance.owner_name + ', ';
-    content += 'your appliance with serial number ' + appliance.serial + ' will expire on ' + format(appliance.warranty_expiration) + '. ';
-    content += 'Contact a representative to renew your warranty.';
-    send(email, subject, content);
-  } else {
-    // Triggered by a change event in the order database.
-    var order = params;
-    if (order.status == 'ordered') {
-      // The order was automatically placed for them (in warranty).
-      console.log('[alert-customer-event.main] triggered by a newly ordered order under warranty.');
-      email = order.owner_email;
-      subject = 'Part automatically ordered for appliance: ' + order.appliance_serial;
-      content = 'Your appliance told us that one of its parts needed a replacement. Since it is still under warranty until ';
-      content += format(order.appliance_warranty_expiration) + ', we have automatically ordered a replacement. ';
-      content += 'It will be delivered soon.';
-      send(email, subject, content);
-    } else if (order.status == 'pending') {
-      // The order was entered in pending mode (not in warranty).
-      console.log('[alert-customer-event.main] triggered by a newly pending order out of warranty.');
-      email = order.owner_email;
-      subject = 'Part ready to order for appliance: ' + order.appliance_serial;
-      content = 'Your appliance told us that one of its parts needed a replacement. Since it is no longer under warranty ';
-      content += '(it expired on ' + format(order.appliance_warranty_expiration) + '), you will need to approve the pending order. ';
-      content += 'Complete the form with your payment and the part will be on its way soon.';
+    // Configure database connection
+    var cloudant = new Cloudant({
+      account: params.CLOUDANT_USERNAME,
+      password: params.CLOUDANT_PASSWORD
+    });
+    var orderDb = cloudant.db.use('order');
+
+    if (params.hasOwnProperty('appliance')) {
+      // Their warranty will expire soon.
+      // Invoked manually by the check-warranty-renewal action.
+      console.log('[alert-customer-event.main] invoked by check-warranty-renewal');
+      var appliance = params.appliance;
+      email = appliance.owner_email;
+      subject = 'Warranty expires soon for ' + appliance.serial;
+      content = 'Hello ' + appliance.owner_name + ', ';
+      content += 'your appliance with serial number ' + appliance.serial + ' will expire on ' + format(appliance.warranty_expiration) + '. ';
+      content += 'Contact a representative to renew your warranty.';
       send(email, subject, content);
     } else {
-      // Some other order status we're not implementing at the moment.
-      console.log('[alert-customer-event.main] triggered by some other order status.');
-      whisk.done({
-        result: 'This workflow is not yet implemented.'
-      });
+      // Triggered by a change event in the order database.
+      var order = params;
+      if (order.status == 'ordered') {
+        // The order was automatically placed for them (in warranty).
+        console.log('[alert-customer-event.main] triggered by a newly ordered order under warranty.');
+        email = order.owner_email;
+        subject = 'Part automatically ordered for appliance: ' + order.appliance_serial;
+        content = 'Your appliance told us that one of its parts needed a replacement. Since it is still under warranty until ';
+        content += format(order.appliance_warranty_expiration) + ', we have automatically ordered a replacement. ';
+        content += 'It will be delivered soon.';
+        send(email, subject, content);
+      } else if (order.status == 'pending') {
+        // The order was entered in pending mode (not in warranty).
+        console.log('[alert-customer-event.main] triggered by a newly pending order out of warranty.');
+        email = order.owner_email;
+        subject = 'Part ready to order for appliance: ' + order.appliance_serial;
+        content = 'Your appliance told us that one of its parts needed a replacement. Since it is no longer under warranty ';
+        content += '(it expired on ' + format(order.appliance_warranty_expiration) + '), you will need to approve the pending order. ';
+        content += 'Complete the form with your payment and the part will be on its way soon.';
+        send(email, subject, content);
+      } else {
+        // Some other order status we're not implementing at the moment.
+        console.log('[alert-customer-event.main] triggered by some other order status.');
+        resolve({
+          result: 'This workflow is not yet implemented.'
+        });
+      }
     }
-  }
 
-  // Convert from Unix timestamp
-  function format(timestamp) {
-    var warranty_expiration_date = new Date(timestamp * 1000);
-    return (warranty_expiration_date.getMonth() + 1) + '/' + warranty_expiration_date.getDate() + '/' + warranty_expiration_date.getFullYear();
-  }
+  });
+}
 
-  // Configure SendGrid (need to use request against the API directly)
-  function send(email, subject, content) {
+// Convert from Unix timestamp
+function format(timestamp) {
+  var warranty_expiration_date = new Date(timestamp * 1000);
+  return (warranty_expiration_date.getMonth() + 1) + '/' + warranty_expiration_date.getDate() + '/' + warranty_expiration_date.getFullYear();
+}
+
+// Configure SendGrid (need to use request against the API directly)
+function send(email, subject, content) {
+
+  return new Promise(function(resolve, reject) {
     request({
       url: 'https://api.sendgrid.com/v3/mail/send',
       method: 'POST',
@@ -102,18 +109,17 @@ function main(params) {
       if (err) {
         console.log('[alert-customer-event.main] error: ');
         console.log(err);
-        whisk.done({
+        reject({
           result: 'Error sending customer alert.'
         });
       } else {
         console.log('[alert-customer-event.main] success: ');
         console.log(body);
-        whisk.done({
+        resolve({
           result: 'Success. Customer event sent.'
         });
       }
     });
-  }
-
-  return whisk.async();
+  });
+  
 }

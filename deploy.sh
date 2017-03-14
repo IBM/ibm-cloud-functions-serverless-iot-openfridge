@@ -14,9 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Exit if any command fails
-set -e
-
 # Color vars to be used in shell script output
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
@@ -31,6 +28,9 @@ function usage() {
 }
 
 function install() {
+  # Exit if any command fails
+  set -e
+
   echo -e "${YELLOW}Installing OpenWhisk actions, triggers, and rules for OpenFridge..."
 
   echo "Binding the Cloudant package"
@@ -75,17 +75,16 @@ function install() {
     --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD"
   wsk action create check-warranty-renewal actions/check-warranty-renewal.js \
     --param CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
-    --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD" \
-    --param CURRENT_NAMESPACE "$CURRENT_NAMESPACE"
+    --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD"
   wsk action create alert-customer-event actions/alert-customer-event.js \
     --param CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
     --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD" \
     --param SENDGRID_API_KEY "$SENDGRID_API_KEY" \
     --param SENDGRID_FROM_ADDRESS "$SENDGRID_FROM_ADDRESS"
   wsk action create service-sequence \
-    --sequence /$CURRENT_NAMESPACE/$CLOUDANT_INSTANCE/read,create-order-event
+    --sequence /_/$CLOUDANT_INSTANCE/read,create-order-event
   wsk action create order-sequence \
-    --sequence /$CURRENT_NAMESPACE/$CLOUDANT_INSTANCE/read,alert-customer-event
+    --sequence /_/$CLOUDANT_INSTANCE/read,alert-customer-event
 
   echo "Enabling rules"
   wsk rule create service-rule service-trigger service-sequence
