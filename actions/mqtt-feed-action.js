@@ -89,9 +89,7 @@ function handleResponse(err, res, body) {
     if (!err && res.statusCode === 200) {
       console.log('MQTT feed: HTTP request success.');
       resolve();
-    }
-
-    if (res) {
+    } else if (res) {
       console.log('MQTT feed: Error invoking provider:', res.statusCode, body);
       reject(body.error);
     } else {
