@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-var Cloudant = require('cloudant');
 var request = require('request-promise');
 
 /**
@@ -23,8 +22,6 @@ var request = require('request-promise');
  *
  * @param   params.id                       The id of the record in the Cloudant 'service' database, if invoked by a database change
  * @param   params.appliance                The appliance object if invoked by the nightly alarm trigger
- * @param   params.CLOUDANT_USERNAME        Cloudant username (set once at action update time)
- * @param   params.CLOUDANT_PASSWORD        Cloudant password (set once at action update time)
  * @param   params.SENDGRID_API_KEY         SendGrid key for sending notifications
  * @param   params.SENDGRID_FROM_ADDRESS    Address to set as sender
  * @return                                  Standard OpenWhisk success/error response
@@ -36,13 +33,6 @@ function main(params) {
 
   return new Promise(function(resolve, reject) {
 
-    // Configure database connection
-    var cloudant = new Cloudant({
-      account: params.CLOUDANT_USERNAME,
-      password: params.CLOUDANT_PASSWORD
-    });
-    var orderDb = cloudant.db.use('order');
-
     if (params.hasOwnProperty('appliance')) {
       // Their warranty will expire soon.
       // Invoked manually by the check-warranty-renewal action.
@@ -53,19 +43,23 @@ function main(params) {
       content = 'Hello ' + appliance.owner_name + ', ';
       content += 'your appliance with serial number ' + appliance.serial + ' will expire on ' + format(appliance.warranty_expiration) + '. ';
       content += 'Contact a representative to renew your warranty.';
-      return send(email, subject, content);
+      return send(email, subject, content, params)
+        .then(res => ({success: '[alert-customer-event.main] Success sending notification'}))
+        .catch(err => ({ error: '[alert-customer-event.main] Error sending notification: ' + err }));
     } else {
       // Triggered by a change event in the order database.
       var order = params;
       if (order.status == 'ordered') {
         // The order was automatically placed for them (in warranty).
-        console.log('[alert-customer-event.main] triggered by a newly ordered order under warranty.');
+        console.log('[alert-customer-event.main] triggered by a newly created order under warranty.');
         email = order.owner_email;
         subject = 'Part automatically ordered for appliance: ' + order.appliance_serial;
         content = 'Your appliance told us that one of its parts needed a replacement. Since it is still under warranty until ';
         content += format(order.appliance_warranty_expiration) + ', we have automatically ordered a replacement. ';
         content += 'It will be delivered soon.';
-        return send(email, subject, content);
+        return send(email, subject, content, params)
+          .then(res => ({success: '[alert-customer-event.main] Success sending notification'}))
+          .catch(err => ({ error: '[alert-customer-event.main] Error sending notification: ' + err }));
       } else if (order.status == 'pending') {
         // The order was entered in pending mode (not in warranty).
         console.log('[alert-customer-event.main] triggered by a newly pending order out of warranty.');
@@ -74,7 +68,9 @@ function main(params) {
         content = 'Your appliance told us that one of its parts needed a replacement. Since it is no longer under warranty ';
         content += '(it expired on ' + format(order.appliance_warranty_expiration) + '), you will need to approve the pending order. ';
         content += 'Complete the form with your payment and the part will be on its way soon.';
-        return send(email, subject, content);
+        return send(email, subject, content, params)
+          .then(res => ({success: '[alert-customer-event.main] Success sending notification'}))
+          .catch(err => ({ error: '[alert-customer-event.main] Error sending notification: ' + err }));
       } else {
         // Some other order status we're not implementing at the moment.
         console.log('[alert-customer-event.main] triggered by some other order status.');
@@ -94,7 +90,7 @@ function format(timestamp) {
 }
 
 // Configure SendGrid (need to use request against the API directly)
-function send(email, subject, content) {
+function send(email, subject, content, params) {
 
   return request({
     url: 'https://api.sendgrid.com/v3/mail/send',
