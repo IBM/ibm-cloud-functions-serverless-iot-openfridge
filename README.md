@@ -44,7 +44,7 @@ A refrigerator periodically sends alerts to a cloud service indicating the statu
 
 * A Node.js Cloud Foundry application that is subscribed to an wildcard event topic event for refrigerator devices - such as `iot-2/type/+/id/+/evt/+/fmt/json` - triggers OpenWhisk actions when new messages are received. (This reuses code from the [James Thomas' OpenWhisk and MQTT tutorial](http://jamesthom.as/blog/2016/06/15/openwhisk-and-mqtt/)).
 
- ![Primary workflow 1](docs/primary-workflow-1.png)
+    ![Primary workflow 1](docs/primary-workflow-1.png)
 
 * [An analytics action](actions/analyze-service-event.js) is triggered by the message event from the Cloud Foundry app, and it inspects the message, determining whether to take further action. If, for example, the filter life reading is lower than normal, it creates a new service record in a Cloudant database.
 
@@ -52,7 +52,7 @@ A refrigerator periodically sends alerts to a cloud service indicating the statu
 
 * [A notification action](actions/alert-customer-event.js) is triggered by the new order record. If the appliance was in warranty, the action sends an email notifying the user that the part has been ordered and shipped. Otherwise, it sends an email asking the owner to complete the purchase of the out-of-warranty part.
 
- ![Primary workflow 2](docs/primary-workflow-2.png)
+    ![Primary workflow 2](docs/primary-workflow-2.png)
 
 ## Supplementary workflows
 
@@ -60,7 +60,7 @@ A refrigerator periodically sends alerts to a cloud service indicating the statu
 
 * The [same action](actions/alert-customer-event.js) can be used on demand to alert the customer each time an order state changes in the database (such as moving from _ordered_ to _shipped_ to _delivered_).
 
- ![Supplementary workflows](docs/supplementary-workflows.png)
+    ![Supplementary workflows](docs/supplementary-workflows.png)
 
 ## Bringing it all together
 
