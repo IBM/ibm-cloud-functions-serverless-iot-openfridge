@@ -37,14 +37,14 @@ echo "Cleanly deploying wsk actions, etc."
 ./deploy.sh --uninstall
 ./deploy.sh --install
 
-echo "Waiting for triggers/actions to finish installing (sleep 15)"
-sleep 15
+echo "Waiting for triggers/actions to finish installing (sleep 5)"
+sleep 5
 
 echo "Invoking a write to Cloudant"
 echo "TODO: test"
 
-echo "Waiting for triggers/actions to finish executing(sleep 15)"
-sleep 15
+echo "Waiting for triggers/actions to finish executing(sleep 5)"
+sleep 5
 
 echo "Verify actions were triggered"
 LAST_ACTIVATION=`wsk activation list | head -2 | tail -1 | awk '{ print $1 }'`
