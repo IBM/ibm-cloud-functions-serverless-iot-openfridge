@@ -23,18 +23,18 @@ var openwhisk = require('openwhisk');
  * Authentication credentials, supporting Trigger invocation through the
  * OpenWhisk API, are passed in as invocation parameters.
  */
-function main(params) {
-  if (params.lifecycleEvent === 'CREATE') {
-    return validate(params)
-      .then(params => create(params))
-      .then(res => ({success: 'MQTT feed: Success creating trigger'}))
-      .catch(err => ({ error: 'MQTT feed: Error invoking provider: ' + err }));
-  } else if (params.lifecycleEvent === 'DELETE') {
-    return remove(params)
-      .then(res => ({success: 'MQTT feed: Success deleting trigger'}))
-      .catch(err => ({ error: 'MQTT feed: Error invoking provider: ' + err }));
-  }
-}
+ function main(params) {
+   if (params.lifecycleEvent === 'CREATE') {
+     return validate(params)
+       .then(params => create(params))
+       .then(res => ({success: 'MQTT feed: Success creating trigger'}))
+       .catch(err => ({ error: 'MQTT feed: Error invoking provider for create: ' + err }));
+   } else if (params.lifecycleEvent === 'DELETE') {
+     return remove(params)
+       .then(res => ({success: 'MQTT feed: Success deleting trigger'}))
+       .catch(err => ({ error: 'MQTT feed: Error invoking provider for delete: ' + err }));
+   }
+ }
 
 function validate(params) {
   return new Promise(function(resolve, reject) {

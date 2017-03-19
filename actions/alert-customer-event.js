@@ -15,7 +15,7 @@
  */
 
 var Cloudant = require('cloudant');
-var request = require('request');
+var request = require('request-promise');
 
 /**
  * 1. Triggered whenever data changes in the database (what about proactive warranty renewal alert?)
@@ -53,7 +53,7 @@ function main(params) {
       content = 'Hello ' + appliance.owner_name + ', ';
       content += 'your appliance with serial number ' + appliance.serial + ' will expire on ' + format(appliance.warranty_expiration) + '. ';
       content += 'Contact a representative to renew your warranty.';
-      send(email, subject, content);
+      return send(email, subject, content);
     } else {
       // Triggered by a change event in the order database.
       var order = params;
@@ -65,7 +65,7 @@ function main(params) {
         content = 'Your appliance told us that one of its parts needed a replacement. Since it is still under warranty until ';
         content += format(order.appliance_warranty_expiration) + ', we have automatically ordered a replacement. ';
         content += 'It will be delivered soon.';
-        send(email, subject, content);
+        return send(email, subject, content);
       } else if (order.status == 'pending') {
         // The order was entered in pending mode (not in warranty).
         console.log('[alert-customer-event.main] triggered by a newly pending order out of warranty.');
@@ -74,7 +74,7 @@ function main(params) {
         content = 'Your appliance told us that one of its parts needed a replacement. Since it is no longer under warranty ';
         content += '(it expired on ' + format(order.appliance_warranty_expiration) + '), you will need to approve the pending order. ';
         content += 'Complete the form with your payment and the part will be on its way soon.';
-        send(email, subject, content);
+        return send(email, subject, content);
       } else {
         // Some other order status we're not implementing at the moment.
         console.log('[alert-customer-event.main] triggered by some other order status.');
@@ -96,30 +96,14 @@ function format(timestamp) {
 // Configure SendGrid (need to use request against the API directly)
 function send(email, subject, content) {
 
-  return new Promise(function(resolve, reject) {
-    request({
-      url: 'https://api.sendgrid.com/v3/mail/send',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + params.SENDGRID_API_KEY
-      },
-      body: '{"personalizations": [{"to": [{"email": "' + email + '"}]}],"from": {"email": "' + params.SENDGRID_FROM_ADDRESS + '"},"subject": "' + subject + '","content": [{"type": "text/plain", "value": "' + content + '"}]}'
-    }, function(err, response, body) {
-      if (err) {
-        console.log('[alert-customer-event.main] error: ');
-        console.log(err);
-        reject({
-          result: 'Error sending customer alert.'
-        });
-      } else {
-        console.log('[alert-customer-event.main] success: ');
-        console.log(body);
-        resolve({
-          result: 'Success. Customer event sent.'
-        });
-      }
-    });
+  return request({
+    url: 'https://api.sendgrid.com/v3/mail/send',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + params.SENDGRID_API_KEY
+    },
+    body: '{"personalizations": [{"to": [{"email": "' + email + '"}]}],"from": {"email": "' + params.SENDGRID_FROM_ADDRESS + '"},"subject": "' + subject + '","content": [{"type": "text/plain", "value": "' + content + '"}]}'
   });
 
 }
