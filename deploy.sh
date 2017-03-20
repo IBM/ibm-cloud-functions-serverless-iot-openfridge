@@ -77,8 +77,6 @@ function install() {
     --param CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
     --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD"
   wsk action create alert-customer-event actions/alert-customer-event.js \
-    --param CLOUDANT_USERNAME "$CLOUDANT_USERNAME" \
-    --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD" \
     --param SENDGRID_API_KEY "$SENDGRID_API_KEY" \
     --param SENDGRID_FROM_ADDRESS "$SENDGRID_FROM_ADDRESS"
   wsk action create service-sequence \
