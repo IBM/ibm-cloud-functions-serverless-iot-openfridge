@@ -3,24 +3,24 @@
 
 // See the sample-appliances.txt file for appliance warrant expiration times
 
-// Sent on December 15, 2016: 1481778000
+// Sent on March 20, 2017: 1489993200
 {
     "appliance_serial": "aaaabbbbcccc",
     "part_number": "ddddeeeeffff",
     "reading": "10",
-    "timestamp": 1481778000
+    "timestamp": 1489993200
 }
 
 {
     "appliance_serial": "llllmmmmnnnn",
     "part_number": "ddddeeeeffff",
     "reading": "12",
-    "timestamp": 1481778000
+    "timestamp": 1489993200
 }
 
 {
     "appliance_serial": "xxxxyyyyzzzz",
     "part_number": "ddddeeeeffff",
     "reading": "15",
-    "timestamp": 1481778000
+    "timestamp": 1489993200
 }
