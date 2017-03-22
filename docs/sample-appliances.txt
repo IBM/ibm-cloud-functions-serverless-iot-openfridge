@@ -4,31 +4,31 @@
 // You can use this site to create new timestamps from a date string:
 // http://www.unixtimestampconverter.com/
 
-// Warranty expires on January 31, 2017:    1485838800
+// Warranty expires on April 15, 2017:    1492239600
 {
   "_id": "aaaabbbbcccc",
   "serial": "aaaabbbbcccc",
-  "warranty_expiration": 1485838800,
+  "warranty_expiration": 1492239600,
   "owner_name": "Daniel Krook",
   "owner_email": "krook@example.com",
   "owner_phone": "18885551212"
 }
 
-// Warranty expires on December 16, 2016:   1481864400
+// Warranty expires on March 30, 2017:   1490857200
 {
   "_id": "llllmmmmnnnn",
   "serial": "llllmmmmnnnn",
-  "warranty_expiration": 1481864400,
+  "warranty_expiration": 1490857200,
   "owner_name": "Daniel Krook",
   "owner_email": "krook@example.com",
   "owner_phone": "18885551212"
 }
 
-// Warranty expires on November 30, 2016:   1480482000
+// Warranty expires on March 15, 2017:   1489561200
 {
   "_id": "xxxxyyyyzzzz",
   "serial": "xxxxyyyyzzzz",
-  "warranty_expiration": 1480482000,
+  "warranty_expiration": 1489561200,
   "owner_name": "Daniel Krook",
   "owner_email": "krook@example.com",
   "owner_phone": "18885551212"
