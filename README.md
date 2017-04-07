@@ -4,7 +4,7 @@
 
 This project demonstrates [_serverless_ technology - powered by Apache OpenWhisk on IBM Bluemix - ](https://developer.ibm.com/opentech/2016/09/06/what-makes-serverless-attractive/) in the context of a smarter home scenario. It shows an edge-to-cloud scenario that integrates the Watson IoT Platform, OpenWhisk, and Bluemix services in an event-driven use case based on status messages from connected appliances. This highlights the serverless programming model and discusses the benefits of this approach relative to traditional cloud development.
 
-For more background, check out [the developer story](https://developer.ibm.com/accelerate/journey/openfridge/) on IBM Accelerate. You should have a basic understanding of the OpenWhisk programming model. If not, [try the action, trigger, and rule demo first](https://github.com/IBM/openwhisk-action-trigger-rule). You'll also need a Bluemix account and the latest [OpenWhisk command line tool (`wsk`) installed and on your PATH](https://github.com/IBM/openwhisk-action-trigger-rule/blob/master/docs/OPENWHISK.md).
+For more background, check out [the developer story](https://developer.ibm.com/code/journey/openfridge/) on IBMCode. You should have a basic understanding of the OpenWhisk programming model. If not, [try the action, trigger, and rule demo first](https://github.com/IBM/openwhisk-action-trigger-rule). You'll also need a Bluemix account and the latest [OpenWhisk command line tool (`wsk`) installed and on your PATH](https://github.com/IBM/openwhisk-action-trigger-rule/blob/master/docs/OPENWHISK.md).
 
 If you're interested in the **[OpenWhisk package for Watson IoT MQTT](https://github.com/krook/openwhisk-package-mqtt-watson)** integration, you an find that in its own package repository.
 
