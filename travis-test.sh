@@ -41,7 +41,7 @@ echo "Waiting for triggers/actions to finish installing (sleep 5)"
 sleep 5
 
 echo "Test workflow"
-sudo apt-get curl mosquitto-clients
+sudo apt-get install curl mosquitto-clients
 
 echo "Test 1: Ensure that the listener app is up"
 curl -sL "http://openfridge.mybluemix.net/" -o test-listener-result.txt
@@ -60,7 +60,7 @@ wsk action invoke --blocking --result check-warranty-renewal
 
 echo "Test 5: Unit test customer alert"
 wsk action invoke --blocking --result alert-customer-event \
---param appliance '{"_id": "aaaabbbbcccc", "serial": "aaaabbbbcccc", "warranty_expiration": 1485838800, "owner_name": "Daniel Krook", "owner_email": "${EMAIL}", "owner_phone": "18885551212"}'
+--param appliance '{"_id": "aaaabbbbcccc", "serial": "aaaabbbbcccc", "warranty_expiration": 1485838800, "owner_name": "Daniel Krook", "owner_email": "'${EMAIL}'", "owner_phone": "18885551212"}'
 
 echo "Test 6: Subscribe the MQTT topic for device messages and log messages"
 mosquitto_sub -v -h "$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com" -p 1883 -i "a:$WATSON_TEAM_ID:openfridge" -t 'iot-2/type/+/id/+/evt/+/fmt/json'
