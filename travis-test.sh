@@ -16,19 +16,20 @@
 ##############################################################################
 set -e
 
+echo "Configure local.env"
+touch local.env  # Configurations defined in travis-ci console
+source local.env # Otherwise for local testing
+
 OPENWHISK_BIN=/home/ubuntu/bin
 LINK=https://openwhisk.ng.bluemix.net/cli/go/download/linux/amd64/wsk
 
-echo "Downloading OpenWhisk CLI from '$LINK'...\n"
+echo "Downloading OpenWhisk CLI from '$LINK'..."
 curl -O $LINK
 chmod u+x wsk
 export PATH=$PATH:`pwd`
 
-echo "Configuring CLI from apihost and API key\n"
+echo "Configuring CLI from apihost and API key"
 wsk property set --apihost openwhisk.ng.bluemix.net --auth $OPENWHISK_KEY > /dev/null 2>&1
-
-echo "Configure local.env"
-touch local.env # Configurations defined in travis-ci console
 
 echo "installing jq for bash json parsing"
 sudo apt-get install jq
@@ -63,15 +64,17 @@ wsk action invoke --blocking --result alert-customer-event \
 --param appliance '{"_id": "aaaabbbbcccc", "serial": "aaaabbbbcccc", "warranty_expiration": 1485838800, "owner_name": "Daniel Krook", "owner_email": "'${EMAIL}'", "owner_phone": "18885551212"}'
 
 echo "Test 6: Subscribe the MQTT topic for device messages and log messages"
-mosquitto_sub -v -h "$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com" -p 1883 -i "a:$WATSON_TEAM_ID:openfridge" -t 'iot-2/type/+/id/+/evt/+/fmt/json'
+mosquitto_sub -d -h "$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com" -p 1883 \
+-i "$WATSON_CLIENT" -t "$WATSON_TOPIC" \
+-u "$WATSON_USERNAME" -P "$WATSON_PASSWORD"
 
 echo "Test 7: Send an MQTT message from one device simulator"
-mosquitto_pub -h "$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com" -p 1883 -i "d:$WATSON_TEAM_ID:refrigerator-simulator:1" -t 'iot-2/evt/refrigerator-simulator/fmt/json' -m '{"appliance_serial": "aaaabbbbcccc", "part_number": "ddddeeeeffff", "reading": "10", "timestamp": 1489993200}'
+mosquitto_pub -d -h "$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com" -p 1883 \
+-i "$WATSON_DEVICE" -t "$WATSON_DEVICE_TOPIC" \
+-u "use-token-auth" -P "$WATSON_DEVICE_PASSWORD" \
+-m '{"appliance_serial": "aaaabbbbcccc", "part_number": "ddddeeeeffff", "reading": "10", "timestamp": 1489993200}'
 
-echo "Test 8: Send an MQTT message from a second device simulator"
-mosquitto_pub -h "$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com" -p 1883 -i "d:$WATSON_TEAM_ID:refrigerator-simulator:2" -t 'iot-2/evt/refrigerator-simulator/fmt/json' -m '{"appliance_serial": "llllmmmmnnnn", "part_number": "ddddeeeeffff", "reading": "12", "timestamp": 1489993200}'
-
-echo "Test 9: Check that messages were received"
+echo "Test 8: Check that message was received"
 echo "TODO"
 
 # echo "Verify actions were triggered"
