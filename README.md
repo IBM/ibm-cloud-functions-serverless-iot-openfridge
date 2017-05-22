@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/krook/openfridge.svg?branch=master)](https://travis-ci.org/krook/openfridge)
+[![Build Status](https://travis-ci.org/IBM/openfridge.svg?branch=master)](https://travis-ci.org/IBM/openfridge)
 
 # Project OpenFridge - Proactive customer service with OpenWhisk and Watson
 
