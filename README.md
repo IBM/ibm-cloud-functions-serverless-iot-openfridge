@@ -72,3 +72,6 @@ These workflows come together to demonstrate an end-to-end scenario that can imp
 
 1. [Set up the Bluemix services (Cloudant, SendGrid, Watson IoT, and a Cloud Foundry app)](docs/BLUEMIX.md).
 2. [Set up the OpenWhisk actions, triggers, and rules](docs/OPENWHISK.md).
+
+# License
+[Apache 2.0](LICENSE.txt)
