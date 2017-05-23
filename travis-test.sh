@@ -45,7 +45,7 @@ echo "Test workflow"
 sudo apt-get install curl mosquitto-clients
 
 echo "Test 1: Ensure that the listener app is up"
-curl -sL "http://openfridge.mybluemix.net/" -o test-listener-result.txt
+curl -sL "http://openfridge-travis.mybluemix.net/" -o test-listener-result.txt
 grep "ready" test-listener-result.txt
 
 echo "Test 2: Unit test out of warranty appliance analysis"
