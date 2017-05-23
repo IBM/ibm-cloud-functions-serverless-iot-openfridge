@@ -65,42 +65,13 @@ Log into the Bluemix console and create a [SendGrid](https://console.ng.bluemix.
 
 ## Set up IoT event producer to simulate the device
 
-### Install Paho for your workstation and add devices
+You can use Eclipse Paho or the Eclipse Mosquitto command line tools to publish and subscribe test messages. [If you're on macOS Sierra, use the command line tools as there is an known issue with Paho](https://bugs.eclipse.org/bugs/show_bug.cgi?id=513539) crashing on startup.
 
-- Download [Eclipse Paho](http://www.eclipse.org/paho/clients/tool/) for your computer type, then open it and create a new Connection.
-- You'll need to know the `WATSON_TEAM_ID` (which you should also set in `local.env`). This is the six character alphanumeric ID that you'll see in the top right corner of the Watson IoT dashboard you used earlier.
-- Set the "Server URI" to `tcp://$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com:1883` (replacing `$WATSON_TEAM_ID` with your six digit ID).
-- Set the "Client ID" to `d:$WATSON_TEAM_ID:refrigerator-simulator:$DEVICE_1_ID` (replacing `$DEVICE_1_ID` with the value you set in the previous section. This value doesn't have to be added to `local.env`).
-- On the Options tab, check the "Enable login" box, set the "Username" to "use-token-auth" and enter the token for the specific device in the "Password" field.
-- Optionally, create an additional two device connections following the previous steps.
-- Finally, create a message consuming application connection using the same steps as for the devices, except for the "Client ID" which will be `a:$WATSON_TEAM_ID:openfridge`, and your "Username" and "Password" which will be your API Key information from the previous section (key and token). Update the `WATSON_USERNAME`, `WATSON_PASSWORD` and `WATSON_CLIENT` in `local.env` accordingly.
+* [Eclipse Paho](PAHO.md)
+* [Eclipse Mosquitto CLI](MOSQUITTO.md)
 
-### Connect to IoT Platform and post a message
 
-- First, let's subscribe the consuming application connection to receive messages from all devices. Add a "Subscription" to the `iot-2/type/+/id/+/evt/+/fmt/json` topic and Subscribe (you may have to click Connect and Subscribe again if you lose the connection). Note that this queue format is different from the ones the devices post to because it contains wildcards. Update the topic in `local.env` file to match. ![Subscription view](subscribe.png)
-
-- From the device simulators, then publish a test message onto the Device Type topic. You can find [sample messages for 3 devices here](sample-messages.txt).
-
-- Enter the "Topic" as `iot-2/evt/refrigerator-simulator/fmt/json` in the "Publication" area.
-
-- Enter the sample JSON, making sure the Serial matches your Device.
-
-  ```json
-  {
-    "appliance_serial": "aaaabbbbcccc",
-    "part_number": "ddddeeeeffff",
-    "reading": "15",
-    "timestamp": 1466632598
-  }
-  ```
-
-  ![Publication view](publish.png)
-
-- Look back at the History tab for the application, and you should see the message has been received. ![Received view](received.png)
-
-Now that we've tested connectivity for the Watson IoT platform with our devices, let's use a Cloud Foundry application to be the subscriber we use to listen for events on that MQTT topic.
-
-### Add records for each device in Cloudant
+## Add records for each device in Cloudant
 
 The `CLOUDANT_APPLIANCE_DATABASE` database is a listing of documents that map a customer to a particular appliance, so create one or more documents that map the `appliance_serial` to a particular owner. You can find [sample appliance documents for 3 devices here](sample-appliances.txt)
 
@@ -118,6 +89,8 @@ The `CLOUDANT_APPLIANCE_DATABASE` database is a listing of documents that map a 
 **Important**: the email address specified here will be eventually used to receive email notifications by the OpenWhisk actions - make sure it is valid.
 
 ## Create MQTT feed provider
+
+Now that we've tested connectivity for the Watson IoT platform with our devices, let's use a Cloud Foundry application to be the subscriber we use to listen for events on that MQTT topic.
 
 Since there isn't a single multi-tenant MQTT event producer available as a package on OpenWhisk today, we need to set up a proxy application that will subscribe to an MQTT topic, and in turn invoke our OpenWhisk action on new messages.
 
