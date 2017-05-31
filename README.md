@@ -10,6 +10,14 @@ If you're interested in the **[OpenWhisk package for Watson IoT MQTT](https://gi
 
 [![Project OpenFridge](https://img.youtube.com/vi/0Sl4rWZYo8w/0.jpg)](https://www.youtube.com/watch?v=0Sl4rWZYo8w)
 
+
+## Components
+- Watson IoT platform
+- Apache OpenWhisk on Bluemix
+- Watson IoT MQTT
+- Cloudant
+- SendGrid Service on Bluemix
+
 ## Improving customer service with the IoT and event-driven computing
 
 The Internet of Things enables manufacturers and their customers to make more efficient use of hardware devices by attaching them to a network. Software running on a device paired with analytics in the cloud can improve the quality of customer service and lower maintenance costs for consumer and manufacturer alike.
