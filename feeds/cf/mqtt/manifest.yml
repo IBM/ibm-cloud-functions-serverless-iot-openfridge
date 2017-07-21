@@ -4,7 +4,7 @@ applications:
   path: .
   domain: mybluemix.net
   instances: 1
-  memory: 512M
+  memory: 256M
   buildpack: nodejs_buildpack
   services:
    - cloudant-openfridge
