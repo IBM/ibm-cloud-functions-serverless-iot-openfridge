@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/IBM/openfridge.svg?branch=master)](https://travis-ci.org/IBM/openfridge)
 
-# Proactive customer service with OpenWhisk and the Watson IoT Platform
+# Proactive customer service with OpenWhisk and Watson IoT
 
 This project demonstrates [serverless technology - powered by Apache OpenWhisk on IBM Bluemix - ](https://developer.ibm.com/opentech/2016/09/06/what-makes-serverless-attractive/) in  a smarter home scenario where appliances send diagnostic readings to the cloud for analysis and proactive maintenance.
 
