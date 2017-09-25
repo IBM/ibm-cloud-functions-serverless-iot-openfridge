@@ -58,7 +58,7 @@ function main(params) {
 
         // Insert the new order object with a status of automatically 'ordered' or 'pending' based on warranty status.
         var status = 'pending';
-        if (params.warranty_expiration > Math.floor(Date.now() / 1000)) {
+        if (appliance.warranty_expiration > Math.floor(Date.now() / 1000)) {
           status = 'ordered';
         }
 
