@@ -1,12 +1,12 @@
 [![Build Status](https://travis-ci.org/IBM/openfridge.svg?branch=master)](https://travis-ci.org/IBM/openfridge)
 
-# Proactive customer service with OpenWhisk and Watson IoT
+# Proactive customer service with Apache OpenWhisk on IBM Cloud Functions and the Watson IoT Platform
 
-This project demonstrates [serverless technology - powered by Apache OpenWhisk on IBM Bluemix - ](https://developer.ibm.com/opentech/2016/09/06/what-makes-serverless-attractive/) in  a smarter home scenario where appliances send diagnostic readings to the cloud for analysis and proactive maintenance.
+This project demonstrates [serverless technology](https://developer.ibm.com/opentech/2016/09/06/what-makes-serverless-attractive/) - powered by [Apache OpenWhisk on IBM Cloud Functions](https://bluemix.net/openwhisk/) - in a smarter home scenario where appliances send diagnostic readings to the cloud for analysis and proactive maintenance.
 
 The application integrates the Watson IoT Platform, OpenWhisk, and Bluemix services in an event-driven use case driven by those status messages from Internet-connected appliances.
 
-This highlights the serverless programming model and discusses the benefits of this approach relative to traditional cloud development for handling IoT workloads. For more background, check out [the developer story](https://developer.ibm.com/code/journey/power-smart-fridge/) on IBMCode.
+This highlights the serverless programming model and discusses the benefits of this approach relative to traditional cloud development for handling IoT workloads. For more background, check out [the developer story](https://developer.ibm.com/code/journey/power-smart-fridge/) on IBM Code.
 
 You should have a basic understanding of the OpenWhisk programming model. If not, [try the action, trigger, and rule demo first](https://github.com/IBM/openwhisk-action-trigger-rule). You'll also need a Bluemix account and the latest [OpenWhisk command line tool (`wsk`) installed and on your PATH](https://github.com/IBM/openwhisk-action-trigger-rule/blob/master/docs/OPENWHISK.md).
 
@@ -17,7 +17,7 @@ If you're just interested in the **[OpenWhisk package for Watson IoT MQTT](https
 
 ## Components
 - Watson IoT Platform on Bluemix
-- Apache OpenWhisk on Bluemix
+- Apache OpenWhisk on IBM Cloud Functions
 - Cloudant NoSQL Service on Bluemix
 - SendGrid Email Service on Bluemix
 
