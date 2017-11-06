@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/IBM/openfridge.svg?branch=master)](https://travis-ci.org/IBM/openfridge)
+![Bluemix Deployments](https://metrics-tracker.mybluemix.net/stats/07ea5d51ec8bb84ac50afe3458f45727/badge.svg)
 
 # Proactive customer service with Apache OpenWhisk on IBM Cloud Functions and the Watson IoT Platform
 
@@ -86,6 +87,28 @@ These workflows come together to demonstrate an end-to-end scenario that can imp
 
 1. [Set up the Bluemix services (Cloudant, SendGrid, Watson IoT, and a Cloud Foundry app)](docs/BLUEMIX.md).
 2. [Set up the OpenWhisk actions, triggers, and rules](docs/OPENWHISK.md).
+
+# Privacy Notice
+
+Sample web applications that include this package may be configured to track deployments to [IBM Bluemix](https://www.bluemix.net/) and other Cloud Foundry platforms. The following information is sent to a [Deployment Tracker](https://github.com/IBM/metrics-collector-service) service on each deployment:
+
+* Node.js package version
+* Node.js repository URL
+* Application Name (`application_name`)
+* Application GUID (`application_id`)
+* Application instance index number (`instance_index`)
+* Space ID (`space_id`) or OS username
+* Application Version (`application_version`)
+* Application URIs (`application_uris`)
+* Cloud Foundry API (`cf_api`)
+* Labels and names of bound services
+* Number of instances for each bound service and associated plan information
+* Metadata in the repository.yaml file
+
+This data is collected from the `package.json` and `repository.yaml` file in the sample application and the `VCAP_APPLICATION` and `VCAP_SERVICES` environment variables in IBM Bluemix and other Cloud Foundry platforms. This data is used by IBM to track metrics around deployments of sample applications to IBM Bluemix to measure the usefulness of our examples, so that we can continuously improve the content we offer to you. Only deployments of sample applications that include code to ping the Deployment Tracker service will be tracked.
+
+## Disabling Deployment Tracking
+Deployment tracking can be disabled by removing the `require("metrics-tracker-client").track();` line from **feeds/cf/mqtt/index.js**.
 
 # License
 [Apache 2.0](LICENSE.txt)

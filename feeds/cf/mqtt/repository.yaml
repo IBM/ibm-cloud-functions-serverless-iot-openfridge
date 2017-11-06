@@ -1,0 +1,11 @@
+id: openfridge
+event_id: web
+event_organizer: dev-journeys
+runtimes:
+  - Cloud Foundry
+  - OpenWhisk
+services:
+  - Internet of Things Platform
+  - Cloudant NoSQL DB
+  - SendGrid
+language: nodejs
