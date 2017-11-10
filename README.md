@@ -1,15 +1,15 @@
 [![Build Status](https://travis-ci.org/IBM/openfridge.svg?branch=master)](https://travis-ci.org/IBM/openfridge)
-![Bluemix Deployments](https://metrics-tracker.mybluemix.net/stats/07ea5d51ec8bb84ac50afe3458f45727/badge.svg)
+![IBM Code Deployments](https://metrics-tracker.mybluemix.net/stats/07ea5d51ec8bb84ac50afe3458f45727/badge.svg)
 
 # Proactive customer service with Apache OpenWhisk on IBM Cloud Functions and the Watson IoT Platform
 
 This project demonstrates [serverless technology](https://developer.ibm.com/opentech/2016/09/06/what-makes-serverless-attractive/) - powered by [Apache OpenWhisk on IBM Cloud Functions](https://bluemix.net/openwhisk/) - in a smarter home scenario where appliances send diagnostic readings to the cloud for analysis and proactive maintenance.
 
-The application integrates the Watson IoT Platform, OpenWhisk, and Bluemix services in an event-driven use case driven by those status messages from Internet-connected appliances.
+The application integrates the Watson IoT Platform, OpenWhisk, and IBM Code services in an event-driven use case driven by those status messages from Internet-connected appliances.
 
 This highlights the serverless programming model and discusses the benefits of this approach relative to traditional cloud development for handling IoT workloads. For more background, check out [the developer story](https://developer.ibm.com/code/journey/power-smart-fridge/) on IBM Code.
 
-You should have a basic understanding of the OpenWhisk programming model. If not, [try the action, trigger, and rule demo first](https://github.com/IBM/openwhisk-action-trigger-rule). You'll also need a Bluemix account and the latest [OpenWhisk command line tool (`wsk`) installed and on your PATH](https://github.com/IBM/openwhisk-action-trigger-rule/blob/master/docs/OPENWHISK.md).
+You should have a basic understanding of the OpenWhisk programming model. If not, [try the action, trigger, and rule demo first](https://github.com/IBM/openwhisk-action-trigger-rule). You'll also need a IBM Code account and the latest [OpenWhisk command line tool (`wsk`) installed and on your PATH](https://github.com/IBM/openwhisk-action-trigger-rule/blob/master/docs/OPENWHISK.md).
 
 If you're just interested in the **[OpenWhisk package for Watson IoT MQTT](https://github.com/krook/openwhisk-package-mqtt-watson)** integration, you can find that in its own package repository.
 
@@ -17,10 +17,10 @@ If you're just interested in the **[OpenWhisk package for Watson IoT MQTT](https
 
 
 ## Components
-- Watson IoT Platform on Bluemix
+- Watson IoT Platform on IBM Code
 - Apache OpenWhisk on IBM Cloud Functions
-- Cloudant NoSQL Service on Bluemix
-- SendGrid Email Service on Bluemix
+- Cloudant NoSQL Service on IBM Code
+- SendGrid Email Service on IBM Code
 
 ## Improving customer service with IoT device driven analytics
 
@@ -55,7 +55,7 @@ A refrigerator periodically sends diagnostic readings to a cloud service indicat
 }
 ```
 
-* [This JSON message](docs/sample-messages.txt) is sent by the device to an MQTT topic - such as `iot-2/evt/refrigerator-simulator/fmt/json` - on the Watson IoT Platform on Bluemix. Devices can also send arbitrary binary formats to improve performance.
+* [This JSON message](docs/sample-messages.txt) is sent by the device to an MQTT topic - such as `iot-2/evt/refrigerator-simulator/fmt/json` - on the Watson IoT Platform on IBM Code. Devices can also send arbitrary binary formats to improve performance.
 
 * A Node.js Cloud Foundry application that is subscribed to an wildcard event topic event for refrigerator devices - such as `iot-2/type/+/id/+/evt/+/fmt/json` - triggers OpenWhisk actions when new messages are received. (This reuses code from the [James Thomas' OpenWhisk and MQTT tutorial](http://jamesthom.as/blog/2016/06/15/openwhisk-and-mqtt/)).
 
@@ -79,13 +79,13 @@ A refrigerator periodically sends diagnostic readings to a cloud service indicat
 
 ## Bringing it all together
 
-These workflows come together to demonstrate an end-to-end scenario that can improve customer service with OpenWhisk, IBM Bluemix, and Watson services.
+These workflows come together to demonstrate an end-to-end scenario that can improve customer service with OpenWhisk, IBM Code, and Watson services.
 
 ![Triggers and actions](docs/actions-triggers.png)
 
 ## Running the sample application
 
-1. [Set up the Bluemix services (Cloudant, SendGrid, Watson IoT, and a Cloud Foundry app)](docs/BLUEMIX.md).
+1. [Set up the IBM Code services (Cloudant, SendGrid, Watson IoT, and a Cloud Foundry app)](docs/BLUEMIX.md).
 2. [Set up the OpenWhisk actions, triggers, and rules](docs/OPENWHISK.md).
 
 # Learn more
@@ -101,7 +101,7 @@ These workflows come together to demonstrate an end-to-end scenario that can imp
 
 # Privacy Notice
 
-Sample web applications that include this package may be configured to track deployments to [IBM Bluemix](https://www.bluemix.net/) and other Cloud Foundry platforms. The following information is sent to a [Deployment Tracker](https://github.com/IBM/metrics-collector-service) service on each deployment:
+Sample web applications that include this package may be configured to track deployments to [IBM Code](https://www.bluemix.net/) and other Cloud Foundry platforms. The following information is sent to a [Deployment Tracker](https://github.com/IBM/metrics-collector-service) service on each deployment:
 
 * Node.js package version
 * Node.js repository URL
@@ -116,7 +116,7 @@ Sample web applications that include this package may be configured to track dep
 * Number of instances for each bound service and associated plan information
 * Metadata in the repository.yaml file
 
-This data is collected from the `package.json` and `repository.yaml` file in the sample application and the `VCAP_APPLICATION` and `VCAP_SERVICES` environment variables in IBM Bluemix and other Cloud Foundry platforms. This data is used by IBM to track metrics around deployments of sample applications to IBM Bluemix to measure the usefulness of our examples, so that we can continuously improve the content we offer to you. Only deployments of sample applications that include code to ping the Deployment Tracker service will be tracked.
+This data is collected from the `package.json` and `repository.yaml` file in the sample application and the `VCAP_APPLICATION` and `VCAP_SERVICES` environment variables in IBM Code and other Cloud Foundry platforms. This data is used by IBM to track metrics around deployments of sample applications to IBM Code to measure the usefulness of our examples, so that we can continuously improve the content we offer to you. Only deployments of sample applications that include code to ping the Deployment Tracker service will be tracked.
 
 ## Disabling Deployment Tracking
 Deployment tracking can be disabled by removing the `require("metrics-tracker-client").track();` line from **feeds/cf/mqtt/index.js**.
