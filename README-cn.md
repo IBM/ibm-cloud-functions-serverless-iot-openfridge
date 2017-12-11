@@ -3,13 +3,13 @@
 
 # 通过 OpenWhisk 和 Watson IoT 提供主动客户服务
 
-这个项目演示了，在一个智慧家庭场景中[受 IBM Bluemix 上的 Apache OpenWhisk 支持的无服务器技术](https://developer.ibm.com/opentech/2016/09/06/what-makes-serverless-attractive/)，电器将诊断读数发送到云，以供分析和执行主动维护。
+这个项目演示了，在一个智慧家庭场景中[受 IBM Cloud 上的 Apache OpenWhisk 支持的无服务器技术](https://developer.ibm.com/opentech/2016/09/06/what-makes-serverless-attractive/)，电器将诊断读数发送到云，以供分析和执行主动维护。
 
-该应用程序将 Watson IoT Platform、OpenWhisk 和 Bluemix 服务集成到一个事件驱动的用例中，该用例由来自联网电器的状态消息所驱动。
+该应用程序将 Watson IoT Platform、OpenWhisk 和 Cloud 服务集成到一个事件驱动的用例中，该用例由来自联网电器的状态消息所驱动。
 
 这个项目着重演示无服务器编程模型，讨论此方法相较于处理 IoT 工作负载的传统云开发方法的优势。有关更多背景，请查阅 IBMCode 上的[developer journey](https://developer.ibm.com/code/journey/power-smart-fridge/)。
 
-您应该基本了解 OpenWhisk 编程模型。如果不了解，请[首先尝试action、trigger和policy演示](https://github.com/IBM/openwhisk-action-trigger-rule)。还需要一个 Bluemix 账户并[在您的 PATH 上安装最新的 OpenWhisk 命令行工具 (`wsk`)](https://github.com/IBM/openwhisk-action-trigger-rule/blob/master/docs/OPENWHISK.md)。
+您应该基本了解 OpenWhisk 编程模型。如果不了解，请[首先尝试action、trigger和policy演示](https://github.com/IBM/openwhisk-action-trigger-rule)。还需要一个 Cloud 账户并[在您的 PATH 上安装最新的 OpenWhisk 命令行工具 (`wsk`)](https://github.com/IBM/openwhisk-action-trigger-rule/blob/master/docs/OPENWHISK.md)。
 
 如果仅对集成**[用于 Watson IoT MQTT 的 OpenWhisk 包](https://github.com/krook/openwhisk-package-mqtt-watson)** 感兴趣，可以在它自己的包存储库中找到它。
 
@@ -17,10 +17,10 @@
 
 
 ## 组件
-- Bluemix 上的 Watson IoT Platform
-- Bluemix 上的 Apache OpenWhisk
-- Bluemix 上的 Cloudant NoSQL Service
-- Bluemix 上的 SendGrid Email Service
+- Cloud 上的 Watson IoT Platform
+- Cloud 上的 Apache OpenWhisk
+- Cloud 上的 Cloudant NoSQL Service
+- Cloud 上的 SendGrid Email Service
 
 ## 通过 IoT 设备驱动的分析改进客户服务
 
@@ -79,7 +79,7 @@
 
 ## 结合各个工作流
 
-将这些工作流结合在一起，演示了一个能通过 OpenWhisk、IBM Bluemix 和 Watson 服务改进客户服务的端到端场景。
+将这些工作流结合在一起，演示了一个能通过 OpenWhisk、IBM Cloud 和 Watson 服务改进客户服务的端到端场景。
 
 ![触发器和操作](docs/actions-triggers.png)
 
