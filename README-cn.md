@@ -1,9 +1,10 @@
+*阅读本文的其他语言版本：[English](README.md)。*
 
 [![构建状态](https://travis-ci.org/IBM/openfridge.svg?branch=master)](https://travis-ci.org/IBM/openfridge)
 
 # 通过 OpenWhisk 和 Watson IoT 提供主动客户服务
 
-这个项目演示了，在一个智慧家庭场景中[受 IBM Cloud 上的 Apache OpenWhisk 支持的无服务器技术](https://developer.ibm.com/opentech/2016/09/06/what-makes-serverless-attractive/)，电器将诊断读数发送到云，以供分析和执行主动维护。
+这个项目演示了，在一个智慧家庭场景中[受 IBM Cloud 上的 Apache OpenWhisk 支持](https://bluemix.net/openwhisk/)的[无服务器技术](https://developer.ibm.com/opentech/2016/09/06/what-makes-serverless-attractive/)，电器将诊断读数发送到云，以供分析和执行主动维护。
 
 该应用程序将 Watson IoT Platform、OpenWhisk 和 Cloud 服务集成到一个事件驱动的用例中，该用例由来自联网电器的状态消息所驱动。
 
@@ -55,7 +56,7 @@
 }
 ```
 
-* [这条 JSON 消息](docs/sample-messages.txt) 由设备发送到 Bluemix 上的 Watson IoT Platform 中的一个 MTQQ 主题，比如  `iot-2/evt/refrigerator-simulator/fmt/json`。设备也可以发送任意二进制格式以改善性能。
+* [这条 JSON 消息](docs/sample-messages.txt) 由设备发送到 Cloud 上的 Watson IoT Platform 中的一个 MTQQ 主题，比如  `iot-2/evt/refrigerator-simulator/fmt/json`。设备也可以发送任意二进制格式以改善性能。
 
 * 一个 Node.js Cloud Foundry 应用程序订阅冰箱设备的一个通配符事件主题，比如 `iot-2/type/+/id/+/evt/+/fmt/json`，该应用程序在收到新消息时触发 OpenWhisk 操作。（这里重用了来自 James Thomas 的 [OpenWhisk 和 MQTT 教程] (http://jamesthom.as/blog/2016/06/15/openwhisk-and-mqtt/) 的代码）。
 
