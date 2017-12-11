@@ -58,7 +58,7 @@
 
 * [这条 JSON 消息](docs/sample-messages.txt) 由设备发送到 Cloud 上的 Watson IoT Platform 中的一个 MTQQ 主题，比如  `iot-2/evt/refrigerator-simulator/fmt/json`。设备也可以发送任意二进制格式以改善性能。
 
-* 一个 Node.js Cloud Foundry 应用程序订阅冰箱设备的一个通配符事件主题，比如 `iot-2/type/+/id/+/evt/+/fmt/json`，该应用程序在收到新消息时触发 OpenWhisk 操作。（这里重用了来自 James Thomas 的 [OpenWhisk 和 MQTT 教程] (http://jamesthom.as/blog/2016/06/15/openwhisk-and-mqtt/) 的代码）。
+* 一个 Node.js Cloud Foundry 应用程序订阅冰箱设备的一个通配符事件主题，比如 `iot-2/type/+/id/+/evt/+/fmt/json`，该应用程序在收到新消息时触发 OpenWhisk 操作。（这里重用了来自 James Thomas 的 [OpenWhisk 和 MQTT 教程](http://jamesthom.as/blog/2016/06/15/openwhisk-and-mqtt/) 的代码）。
 
     ![主要工作流 1](docs/primary-workflow-1.png)
 
