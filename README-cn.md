@@ -17,10 +17,10 @@
 
 
 ## 组件
-- Cloud 上的 Watson IoT Platform
-- Cloud 上的 Apache OpenWhisk
-- Cloud 上的 Cloudant NoSQL Service
-- Cloud 上的 SendGrid Email Service
+- IBM Code 上的 Watson IoT Platform
+- IBM Cloud Functions 上的 Apache OpenWhisk
+- IBM Code 上的 Cloudant NoSQL Service
+- IBM Code 上的 SendGrid Email Service
 
 ## 通过 IoT 设备驱动的分析改进客户服务
 
@@ -61,7 +61,7 @@
 
     ![主要工作流 1](docs/primary-workflow-1.png)
 
-* 来自该 Cloud Foundry 应用程序的消息事件触发一个[分析操作] (actions/analyze-service-event.js)，而且它检查该消息以确定是否采取进一步行动。例如，如果过滤器寿命读数低于正常值，它就会在一个 Cloudant 数据库中创建一个新服务记录。
+* 来自该 Cloud Foundry 应用程序的消息事件触发一个[分析操作](actions/analyze-service-event.js)，而且它检查该消息以确定是否采取进一步行动。例如，如果过滤器寿命读数低于正常值，它就会在一个 Cloudant 数据库中创建一个新服务记录。
 
 * 该服务记录的创建触发[另一个操作](actions/create-order-event.js)，以插入一个订单记录。它查询该服务记录，将该电器映射到它登记的所有者，以评估客户是否仍在保修期内。如果电器仍在保修范围内，它自动为该零部件创建一个已批准的订单。如果不在，它创建一个需要客户批准和支付的待处理订单。
 
@@ -73,7 +73,7 @@
 
 * 按计划，每天晚上触发一个[操作](actions/alert-customer-event.js)，以查找即将到期的保修计划（比如在未来 30 天内），并向客户发送一条提醒，建议他们在失去保修之前购买新支持计划。
 
-* 数据库中的订单状态每次更改时（比如从 _ordered_ 进展到 _shipped_，再进展到 _delivered_），也可以根据需要使用这[同一个操作] (actions/alert-customer-event.js) 来提醒客户。
+* 数据库中的订单状态每次更改时（比如从 _ordered_ 进展到 _shipped_，再进展到 _delivered_），也可以根据需要使用这[同一个操作](actions/alert-customer-event.js) 来提醒客户。
 
     ![补充工作流](docs/supplementary-workflows.png)
 
@@ -86,6 +86,7 @@
 ## 运行示例应用程序
 
 1.[设置 Bluemix 服务（Cloudant、SendGrid、Watson IoT 和一个 Cloud Foundry 应用程序）](docs/BLUEMIX.md)。
+
 2.[设置 OpenWhisk 操作、触发器和规则](docs/OPENWHISK.md)。
 
 # 许可
