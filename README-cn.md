@@ -8,9 +8,9 @@
 
 该应用程序将 Watson IoT Platform、OpenWhisk 和 Cloud 服务集成到一个事件驱动的用例中，该用例由来自联网电器的状态消息所驱动。
 
-这个项目着重演示无服务器编程模型，讨论此方法相较于处理 IoT 工作负载的传统云开发方法的优势。有关更多背景，请查阅 IBMCode 上的[developer journey](https://developer.ibm.com/code/journey/power-smart-fridge/)。
+这个项目着重演示无服务器编程模型，讨论此方法相较于处理 IoT 工作负载的传统云开发方法的优势。有关更多背景，请查阅 IBMCode 上的 [developer journey](https://developer.ibm.com/code/journey/power-smart-fridge/)。
 
-您应该基本了解 OpenWhisk 编程模型。如果不了解，请[首先尝试action、trigger和policy演示](https://github.com/IBM/openwhisk-action-trigger-rule)。还需要一个 Cloud 账户并[在您的 PATH 上安装最新的 OpenWhisk 命令行工具 (`wsk`)](https://github.com/IBM/openwhisk-action-trigger-rule/blob/master/docs/OPENWHISK.md)。
+您应该基本了解 OpenWhisk 编程模型。如果不了解，请[首先尝试 action、trigger 和 policy 演示](https://github.com/IBM/openwhisk-action-trigger-rule)。还需要一个 Cloud 账户并[在您的 PATH 上安装最新的 OpenWhisk 命令行工具 (`wsk`)](https://github.com/IBM/openwhisk-action-trigger-rule/blob/master/docs/OPENWHISK.md)。
 
 如果仅对集成**[用于 Watson IoT MQTT 的 OpenWhisk 包](https://github.com/krook/openwhisk-package-mqtt-watson)** 感兴趣，可以在它自己的包存储库中找到它。
 
