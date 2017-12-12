@@ -90,5 +90,38 @@
 
 2.[设置 OpenWhisk 操作、触发器和规则](docs/OPENWHISK.md)。
 
+# 了解更多信息
+
+* **人工智能模式：**喜欢此模式？了解我们的其他 [AI 模式](https://developer.ibm.com/code/technologies/artificial-intelligence/)。
+* **数据分析模式：**喜欢此模式？了解我们的其他[数据分析模式](https://developer.ibm.com/code/technologies/data-science/)
+* **AI 和数据模式播放清单：**收藏包含我们所有模式视频的[播放清单](https://www.youtube.com/playlist?list=PLzUbsvIyrNfknNewObx5N7uGZ5FKH0Fde)
+* **With Watson：**想要进一步改进您的 Watson 应用程序？正在考虑使用 Watson 品牌资产？[加入 With Watson 计划](https://www.ibm.com/watson/with-watson/)，以便利用独家品牌、营销和技术资源来放大和加速您的 Watson 嵌入式商业解决方案。
+* **Data Science Experience：**通过 IBM 的 [Data Science Experience](https://datascience.ibm.com/) 掌握数据科学艺术
+* **PowerAI：**通过一个在 Enterprise Platform for AI 上运行的用于机器学习的软件发行版，更快地开始开发或扩展：[IBM Power Systems](https://www.ibm.com/ms-en/marketplace/deep-learning-platform)
+* **IBM Cloud 上的 Spark：**需要一个 Spark 集群？通过我们的 [Spark 服务](https://console.bluemix.net/catalog/services/apache-spark)，在 IBM Cloud 上创建多达 30 个 Spark 执行程序。
+* **IBM Cloud 上的 Kubernetes：**为您的应用程序带来 [IBM Cloud 上的 Kubernetes 和 Docker](https://www.ibm.com/cloud-computing/bluemix/containers) 的组合力量
+
+# 隐私声明
+
+可以配置包含这个包的样本 Web 应用程序来跟踪向 [IBM Code](https://www.bluemix.net/) 和其他 Cloud Foundry 平台的部署。每次部署时，都会将以下信息发送到 [Deployment Tracker](https://github.com/IBM/metrics-collector-service) 服务：
+
+* Node.js 包版本
+* Node.js 存储库 URL
+* 应用程序名称 (`application_name`)
+* 应用程序 GUID (`application_id`)
+* 应用程序实例索引编号 (`instance_index`)
+* 空间 ID (`space_id`) 或操作系统用户名
+* 应用程序版本 (`application_version`)
+* 应用程序 URI (`application_uris`)
+* Cloud Foundry API (`cf_api`)
+* 绑定服务的标签和名称
+* 每个绑定服务的实例数量和相关计划信息
+* repository.yaml 文件中的元数据
+
+此数据收集自样本应用程序中的 `package.json` 和 `repository.yaml` 文件，以及 IBM Code 和其他 Cloud Foundry 平台中的 `VCAP_APPLICATION` 和 `VCAP_SERVICES` 环境变量。IBM 使用此数据来跟踪与将样本应用程序部署到 IBM Code 相关的指标，以度量我们的示例的实用性，让我们可以持续改进为您提供的内容。只有那些包含代码以对 Deployment Tracker 服务执行 ping 操作的样本应用程序的部署过程才会被跟踪。
+
+## 禁用部署跟踪
+要禁用部署跟踪，可以删除 **feeds/cf/mqtt/index.js** 中的 `require("metrics-tracker-client").track();` 行。
+
 # 许可
 [Apache 2.0](LICENSE.txt)
