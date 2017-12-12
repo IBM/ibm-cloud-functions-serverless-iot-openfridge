@@ -86,7 +86,7 @@
 
 ## 运行示例应用程序
 
-1.[设置 Bluemix 服务（Cloudant、SendGrid、Watson IoT 和一个 Cloud Foundry 应用程序）](docs/BLUEMIX.md)。
+1.[设置 IBM Cloud 服务（Cloudant、SendGrid、Watson IoT 和一个 Cloud Foundry 应用程序）](docs/BLUEMIX.md)。
 
 2.[设置 OpenWhisk 操作、触发器和规则](docs/OPENWHISK.md)。
 
