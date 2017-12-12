@@ -92,8 +92,8 @@
 
 # 了解更多信息
 
-* **人工智能模式：**喜欢此模式？了解我们的其他 [AI 模式](https://developer.ibm.com/code/technologies/artificial-intelligence/)。
-* **数据分析模式：**喜欢此模式？了解我们的其他[数据分析模式](https://developer.ibm.com/code/technologies/data-science/)
+*  **人工智能模式：**喜欢此模式？了解我们的其他 [AI 模式](https://developer.ibm.com/code/technologies/artificial-intelligence/)。
+* ** 数据分析模式： **喜欢此模式？了解我们的其他[数据分析模式](https://developer.ibm.com/code/technologies/data-science/)
 * **AI 和数据模式播放清单：**收藏包含我们所有模式视频的[播放清单](https://www.youtube.com/playlist?list=PLzUbsvIyrNfknNewObx5N7uGZ5FKH0Fde)
 * **With Watson：**想要进一步改进您的 Watson 应用程序？正在考虑使用 Watson 品牌资产？[加入 With Watson 计划](https://www.ibm.com/watson/with-watson/)，以便利用独家品牌、营销和技术资源来放大和加速您的 Watson 嵌入式商业解决方案。
 * **Data Science Experience：**通过 IBM 的 [Data Science Experience](https://datascience.ibm.com/) 掌握数据科学艺术
