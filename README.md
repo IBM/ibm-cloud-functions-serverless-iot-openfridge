@@ -1,4 +1,4 @@
-*Read this in other languages: [中国](README-cn.md).*
+*Read this in other languages: [中国](README-cn.md), [português](README-pt.md).*
 
 [![Build Status](https://travis-ci.org/IBM/ibm-cloud-functions-serverless-iot-openfridge.svg?branch=master)](https://travis-ci.org/IBM/ibm-cloud-functions-serverless-iot-openfridge)
 ![IBM Code Deployments](https://metrics-tracker.mybluemix.net/stats/07ea5d51ec8bb84ac50afe3458f45727/badge.svg)
