@@ -1,6 +1,6 @@
 *Read this in other languages: [中国](README-cn.md).*
 
-[![Build Status](https://travis-ci.org/IBM/openfridge.svg?branch=master)](https://travis-ci.org/IBM/openfridge)
+[![Build Status](https://travis-ci.org/IBM/ibm-cloud-functions-serverless-iot-openfridge.svg?branch=master)](https://travis-ci.org/IBM/ibm-cloud-functions-serverless-iot-openfridge)
 ![IBM Code Deployments](https://metrics-tracker.mybluemix.net/stats/07ea5d51ec8bb84ac50afe3458f45727/badge.svg)
 
 # Proactive customer service with Apache OpenWhisk on IBM Cloud Functions and the Watson IoT Platform

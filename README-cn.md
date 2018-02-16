@@ -1,6 +1,6 @@
 *阅读本文的其他语言版本：[English](README.md)。*
 
-[![构建状态](https://travis-ci.org/IBM/openfridge.svg?branch=master)](https://travis-ci.org/IBM/openfridge)
+[![构建状态](https://travis-ci.org/IBM/ibm-cloud-functions-serverless-iot-openfridge.svg?branch=master)](https://travis-ci.org/IBM/ibm-cloud-functions-serverless-iot-openfridge)
 
 # 通过 OpenWhisk 和 Watson IoT 提供主动客户服务
 
