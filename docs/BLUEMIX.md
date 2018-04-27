@@ -41,7 +41,7 @@ Create one more `topic_listeners` database in Cloudant, which will manage the st
 
 ### Set up SendGrid
 
-Log into the Bluemix console and create a [SendGrid](https://console.ng.bluemix.net/catalog/services/sendgrid/?taxonomyNavigation=services) instance. If you don't want to pay for the minimum plan, you can go to [SendGrid directly to request a free trial](http://sendgrid.com/). Follow the developer documentation to configure an API key. Update `local.env` accordingly. There is important additional information on [configuring SendGrid with Bluemix here](https://www.ibm.com/blogs/bluemix/2016/12/using-sendgrid-easy-sending-email/) in case you run into any issues.
+Log into the Bluemix console and create a [SendGrid](https://console.ng.bluemix.net/catalog/services/sendgrid/?taxonomyNavigation=services) instance. If you don't want to pay for the minimum plan, you can go to [SendGrid directly to request a free trial](https://sendgrid.com/). Follow the developer documentation to configure an API key. Update `local.env` accordingly. There is important additional information on [configuring SendGrid with Bluemix here](https://www.ibm.com/blogs/bluemix/2016/12/using-sendgrid-easy-sending-email/) in case you run into any issues.
 
 ## Set up IoT Foundation
 
@@ -51,17 +51,17 @@ Log into the Bluemix console and create a [SendGrid](https://console.ng.bluemix.
 
 ### Create device type
 
-- On the left side menu, choose "Devices" then click the "Add Device" button on the right. You'll need to create a "Device Type" first, so create one with a Name of "refrigerator-simulator", give it a Description of "A way to simulate a refrigerator", and select "Serial Number", "Manufacturer" and "Model" attributes for the new device type (e.g., using "0" as template values).
+- On the left side menu, choose `Devices` then click the `Add Device` button on the right. You'll need to create a `Device Type` first, so create one with a Name of `refrigerator-simulator`, give it a Description of `A way to simulate a refrigerator`, and select `Serial Number`, `Manufacturer` and `Model` attributes for the new device type (e.g., using `0` as template values).
 
 ### Create a device of that type
 
-- Continue in the same dialog window to add a device instance. Give it a Device ID of "1", Serial number of "aaaabbbbcccc", a Manufacturer of "Electrolux", and a Model of "1200n" and autogenerate (or enter) a Token. You will need to specify this token when connecting the device to the IoT Platform (in our case, in the Paho connection options, as outlined below).
-- Optionally, create two more devices with unique IDs and Serials, such as "2", "llllmmmmnnnn" and "3", "xxxxyyyyzzzz".
+- Continue in the same dialog window to add a device instance. Give it a Device ID of `1`, Serial number of `aaaabbbbcccc`, a Manufacturer of `Electrolux`, and a Model of `1200n` and autogenerate (or enter) a Token. You will need to specify this token when connecting the device to the IoT Platform (in our case, in the Paho connection options, as outlined below).
+- Optionally, create two more devices with unique IDs and Serials, such as `2`, `llllmmmmnnnn` and `3`, `xxxxyyyyzzzz`.
 
 ### Create application access token
 
 - Your devices now have all the access information they need, but you'll need to set up a separate API key for the consuming application, which will be a Node.js application deployed via Cloud Foundry on Bluemix.
-- On the dashboard, choose "Apps" and pick the "API keys" tab. Click the "Generate API Key" button. Save the generated key and token and update them in `local.env`. You also need them for the Paho client setup (as outlined below). Click "Generate".
+- On the dashboard, choose `Apps` and pick the `API keys` tab. Click the `Generate API Key` button. Save the generated key and token and update them in `local.env`. You also need them for the Paho client setup (as outlined below). Click `Generate`.
 
 ## Set up IoT event producer to simulate the device
 
