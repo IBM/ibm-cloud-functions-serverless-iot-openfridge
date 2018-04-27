@@ -162,7 +162,7 @@ Inside of the core OpenWhisk logic, we have the trigger we created above for the
 
 # End-to-end test
 
-In order to test the entire solution end-to-end, send a sample MQTT event using the Paho client (as outlined in [BLUEMIX.md](BLUEMIX.md), and observe an email sent to the address registered with the device.
+In order to test the entire solution end-to-end, send a sample MQTT event using the Paho client (as outlined in [BLUEMIX.md](BLUEMIX.md)), and observe an email sent to the address registered with the device.
 
 ## Troubleshooting
 
