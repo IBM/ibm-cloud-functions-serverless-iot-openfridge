@@ -18,7 +18,6 @@
 const express = require('express');
 const Cloudant = require('cloudant');
 const FeedController = require('./lib/feed_controller.js');
-require('metrics-tracker-client').track();
 
 // Setup express for handling HTTP requests
 const app = express();

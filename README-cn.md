@@ -101,27 +101,5 @@
 * **IBM Cloud 上的 Spark：** 需要一个 Spark 集群？通过我们的 [Spark 服务](https://console.bluemix.net/catalog/services/apache-spark)，在 IBM Cloud 上创建多达 30 个 Spark 执行程序。
 * **IBM Cloud 上的 Kubernetes：** 为您的应用程序带来 [IBM Cloud 上的 Kubernetes 和 Docker](https://www.ibm.com/cloud-computing/bluemix/containers) 的组合力量
 
-# 隐私声明
-
-可以配置包含这个包的样本 Web 应用程序来跟踪向 [IBM Code](https://www.bluemix.net/) 和其他 Cloud Foundry 平台的部署。每次部署时，都会将以下信息发送到 [Deployment Tracker](https://github.com/IBM/metrics-collector-service) 服务：
-
-* Node.js 包版本
-* Node.js 存储库 URL
-* 应用程序名称 (`application_name`)
-* 应用程序 GUID (`application_id`)
-* 应用程序实例索引编号 (`instance_index`)
-* 空间 ID (`space_id`) 或操作系统用户名
-* 应用程序版本 (`application_version`)
-* 应用程序 URI (`application_uris`)
-* Cloud Foundry API (`cf_api`)
-* 绑定服务的标签和名称
-* 每个绑定服务的实例数量和相关计划信息
-* repository.yaml 文件中的元数据
-
-此数据收集自样本应用程序中的 `package.json` 和 `repository.yaml` 文件，以及 IBM Code 和其他 Cloud Foundry 平台中的 `VCAP_APPLICATION` 和 `VCAP_SERVICES` 环境变量。IBM 使用此数据来跟踪与将样本应用程序部署到 IBM Code 相关的指标，以度量我们的示例的实用性，让我们可以持续改进为您提供的内容。只有那些包含代码以对 Deployment Tracker 服务执行 ping 操作的样本应用程序的部署过程才会被跟踪。
-
-## 禁用部署跟踪
-要禁用部署跟踪，可以删除 **feeds/cf/mqtt/index.js** 中的 `require("metrics-tracker-client").track();` 行。
-
 # 许可
 [Apache 2.0](LICENSE.txt)
