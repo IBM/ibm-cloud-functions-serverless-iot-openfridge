@@ -12,7 +12,7 @@
 
 您应该基本了解 OpenWhisk 编程模型。如果不了解，请[首先尝试 action、trigger 和 policy 演示](https://github.com/IBM/openwhisk-action-trigger-rule)。还需要一个 Cloud 账户并[在您的 PATH 上安装最新的 OpenWhisk 命令行工具 (`wsk`)](https://github.com/IBM/openwhisk-action-trigger-rule/blob/master/docs/OPENWHISK.md)。
 
-如果仅对集成**[用于 Watson IoT MQTT 的 OpenWhisk 包](https://github.com/krook/openwhisk-package-mqtt-watson)** 感兴趣，可以在它自己的包存储库中找到它。
+如果仅对集成 **[用于 Watson IoT MQTT 的 OpenWhisk 包](https://github.com/krook/openwhisk-package-mqtt-watson)** 感兴趣，可以在它自己的包存储库中找到它。
 
 [![Project OpenFridge](https://img.youtube.com/vi/0Sl4rWZYo8w/0.jpg)](https://www.youtube.com/watch?v=0Sl4rWZYo8w)
 
