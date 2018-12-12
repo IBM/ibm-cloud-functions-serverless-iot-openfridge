@@ -41,8 +41,8 @@ echo "Cleanly deploying wsk actions, etc."
 echo "Waiting for triggers/actions to finish installing (sleep 5)"
 sleep 5
 
-echo "Test workflow"
-sudo apt-get install curl mosquitto-clients
+# echo "Test workflow"
+# sudo apt-get install curl mosquitto-clients
 
 echo "Test 1: Ensure that the listener app is up"
 curl -sL "http://openfridge-travis.mybluemix.net/" -o test-listener-result.txt
