@@ -70,10 +70,10 @@ echo "Test 6: TODO: Find version with -C option. Subscribe the MQTT topic for de
 # -C 1 > one_message.txt
 
 echo "Test 7: Send an MQTT message from one device simulator"
-mosquitto_pub -d -h "$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com" -p 1883 \
--i "$WATSON_DEVICE" -t "$WATSON_DEVICE_TOPIC" \
--u "use-token-auth" -P "$WATSON_DEVICE_PASSWORD" \
--m '{"appliance_serial": "aaaabbbbcccc", "part_number": "ddddeeeeffff", "reading": "10", "timestamp": 1489993200}'
+# mosquitto_pub -d -h "$WATSON_TEAM_ID.messaging.internetofthings.ibmcloud.com" -p 1883 \
+# -i "$WATSON_DEVICE" -t "$WATSON_DEVICE_TOPIC" \
+# -u "use-token-auth" -P "$WATSON_DEVICE_PASSWORD" \
+# -m '{"appliance_serial": "aaaabbbbcccc", "part_number": "ddddeeeeffff", "reading": "10", "timestamp": 1489993200}'
 
 echo "Test 8: TODO: Check that message was received"
 # grep "appliance_serial" test-listener-result.txt
