@@ -31,8 +31,8 @@ export PATH=$PATH:`pwd`
 echo "Configuring CLI from apihost and API key"
 wsk property set --apihost openwhisk.ng.bluemix.net --auth $OPENWHISK_KEY > /dev/null 2>&1
 
-echo "installing jq for bash json parsing"
-sudo apt-get install jq
+# echo "installing jq for bash json parsing"
+# sudo apt-get install jq
 
 echo "Cleanly deploying wsk actions, etc."
 ./deploy.sh --uninstall
