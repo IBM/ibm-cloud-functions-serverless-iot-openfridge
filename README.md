@@ -4,6 +4,10 @@
 
 # Proactive customer service with Apache OpenWhisk on IBM Cloud Functions and the Watson IoT Platform
 
+# WARNING: This repository is no longer maintained :warning:
+
+> This repository will not be updated. The repository will be kept available in read-only mode.
+
 This project demonstrates [serverless technology](https://developer.ibm.com/opentech/2016/09/06/what-makes-serverless-attractive/) - powered by [Apache OpenWhisk on IBM Cloud Functions](https://bluemix.net/openwhisk/) - in a smarter home scenario where appliances send diagnostic readings to the cloud for analysis and proactive maintenance.
 
 The application integrates the Watson IoT Platform, OpenWhisk, and IBM Code services in an event-driven use case driven by those status messages from Internet-connected appliances.
